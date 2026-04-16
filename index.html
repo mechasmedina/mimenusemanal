@@ -3,227 +3,312 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Mi Menú Semanal</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Mis Recetas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #F8F6F2;
   --surface: #FFFFFF;
   --card: #F2EFE9;
-  --card-hover: #EAE6DE;
   --border: #E2DDD5;
   --border-dark: #CCC6BB;
   --sage: #4F7E52;
   --sage-light: #EBF3EB;
   --sage-mid: #6FA372;
   --mint: #2D5E30;
-  --terracotta: #B85C3C;
-  --terra-light: #FBF0EC;
-  --gold: #9A6E20;
   --text: #1A221B;
   --text-mid: #627065;
   --text-dim: #A0ACA2;
-  --breakfast: #9A6E20;
-  --breakfast-bg: #FBF4E6;
-  --snack: #4F7E52;
-  --snack-bg: #EBF3EB;
-  --lunch: #2E6E96;
-  --lunch-bg: #E8F2F8;
-  --dinner: #6A4A90;
-  --dinner-bg: #F0EBF8;
   --shadow-sm: 0 1px 6px rgba(0,0,0,0.06);
   --shadow: 0 2px 14px rgba(0,0,0,0.08);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+
+  /* Category colors */
+  --batido: #2E7D9A;       --batido-bg: #E8F4F8;     --batido-border: #80C4D8;
+  --complemento: #9A6E20;  --complemento-bg: #FBF4E6; --complemento-border: #D4B070;
+  --colacion: #4F7E52;     --colacion-bg: #EBF3EB;    --colacion-border: #90C494;
+  --comida: #7A4A00;       --comida-bg: #FDF0E0;      --comida-border: #D4946A;
+  --cena: #6A4A90;         --cena-bg: #F0EBF8;        --cena-border: #A890C8;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-body { background:var(--bg); font-family:'Outfit',sans-serif; color:var(--text); min-height:100vh; overflow-x:hidden; }
+html, body { height:100%; }
+body { background:var(--bg); font-family:'Outfit',sans-serif; color:var(--text); }
 
 /* ── HEADER ── */
 .header {
   background:var(--surface);
   border-bottom:1px solid var(--border);
-  padding:14px 16px 0;
+  padding:18px 20px 16px;
   position:sticky; top:0; z-index:100;
   box-shadow:var(--shadow-sm);
 }
-.header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-.app-title { font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--mint); }
-.app-title span { display:block; font-size:10px; font-family:'Outfit',sans-serif; font-weight:500; color:var(--text-dim); letter-spacing:2.5px; text-transform:uppercase; margin-bottom:2px; }
-.week-nav { display:flex; align-items:center; gap:6px; }
-.week-btn { width:30px; height:30px; border-radius:8px; background:var(--card); border:1px solid var(--border); color:var(--text-mid); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; transition:all 0.15s; }
-.week-btn:active { background:var(--card-hover); }
-.week-label { font-size:11px; color:var(--text-mid); font-weight:500; min-width:68px; text-align:center; }
 
-.day-tabs { display:flex; gap:4px; overflow-x:auto; scrollbar-width:none; }
-.day-tabs::-webkit-scrollbar { display:none; }
-.day-tab { flex-shrink:0; padding:7px 11px; border-radius:10px 10px 0 0; border:1px solid transparent; border-bottom:none; background:transparent; color:var(--text-dim); font-size:12px; font-weight:500; cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column; align-items:center; gap:3px; }
-.day-tab.active { background:var(--bg); border-color:var(--border); color:var(--mint); font-weight:600; }
-.day-dot { width:5px; height:5px; border-radius:50%; background:var(--terracotta); opacity:0; transition:opacity 0.2s; }
-.day-tab.has-meals .day-dot { opacity:1; }
+.header-row {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:14px;
+}
 
-/* ── LAYOUT ── */
-.app-body { display:flex; height:calc(100vh - 128px); }
+.app-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px; color:var(--mint);
+}
+.app-title span {
+  display:block; font-size:10px; font-family:'Outfit',sans-serif;
+  font-weight:500; color:var(--text-dim); letter-spacing:2.5px;
+  text-transform:uppercase; margin-bottom:3px;
+}
 
-/* ── SIDEBAR ── */
-.sidebar { width:205px; flex-shrink:0; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
-.sidebar-header { padding:12px 12px 8px; border-bottom:1px solid var(--border); }
-.sidebar-title { font-size:10px; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); margin-bottom:8px; font-weight:600; }
-.filter-pills { display:flex; flex-wrap:wrap; gap:4px; }
-.filter-pill { padding:3px 8px; border-radius:20px; font-size:10px; cursor:pointer; border:1px solid var(--border); transition:all 0.15s; font-weight:500; background:var(--card); color:var(--text-mid); }
-.filter-pill.active { opacity:1; }
-.filter-pill:not(.active) { opacity:0.35; }
-.filter-pill[data-filter="desayuno"].active { background:var(--breakfast-bg); color:var(--breakfast); border-color:#D4B070; }
-.filter-pill[data-filter="colacion"].active { background:var(--snack-bg); color:var(--snack); border-color:#90C494; }
-.filter-pill[data-filter="comida"].active { background:var(--lunch-bg); color:var(--lunch); border-color:#80B4D0; }
-.filter-pill[data-filter="cena"].active { background:var(--dinner-bg); color:var(--dinner); border-color:#A890C8; }
-.search-box { margin:8px 12px 4px; position:relative; }
-.search-box input { width:100%; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 10px 6px 26px; color:var(--text); font-size:11px; font-family:'Outfit',sans-serif; outline:none; transition:border-color 0.2s; }
-.search-box input:focus { border-color:var(--sage-mid); }
-.search-box input::placeholder { color:var(--text-dim); }
-.search-icon { position:absolute; left:8px; top:50%; transform:translateY(-50%); font-size:11px; }
-.recipe-bank { flex:1; overflow-y:auto; padding:8px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+.header-count {
+  font-size:11px; color:var(--text-dim); font-weight:500;
+  background:var(--card); border:1px solid var(--border);
+  padding:4px 10px; border-radius:20px;
+}
 
-.recipe-chip { padding:9px 10px; border-radius:10px; background:var(--surface); border:1px solid var(--border); margin-bottom:5px; cursor:grab; transition:all 0.18s; user-select:none; box-shadow:var(--shadow-sm); position:relative; }
-.recipe-chip:active { cursor:grabbing; opacity:0.6; }
-.recipe-chip:hover { border-color:var(--sage-mid); box-shadow:var(--shadow); }
-.recipe-chip.dragging { opacity:0.25; }
-.chip-name { font-size:11px; color:var(--text); line-height:1.3; margin-bottom:3px; }
-.chip-cat { font-size:9px; font-weight:600; letter-spacing:0.3px; text-transform:uppercase; }
-.chip-cat.desayuno { color:var(--breakfast); }
-.chip-cat.colacion { color:var(--snack); }
-.chip-cat.comida { color:var(--lunch); }
-.chip-cat.cena { color:var(--dinner); }
-.chip-eye { position:absolute; top:8px; right:8px; font-size:12px; opacity:0; transition:opacity 0.2s; cursor:pointer; }
-.recipe-chip:hover .chip-eye { opacity:1; }
+/* Search */
+.search-wrap {
+  position:relative; margin-bottom:12px;
+}
+.search-wrap input {
+  width:100%; background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:10px 16px 10px 38px;
+  color:var(--text); font-size:14px; font-family:'Outfit',sans-serif;
+  outline:none; transition:border-color 0.2s;
+}
+.search-wrap input:focus { border-color:var(--sage-mid); background:white; }
+.search-wrap input::placeholder { color:var(--text-dim); }
+.search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:15px; }
+.search-clear {
+  position:absolute; right:12px; top:50%; transform:translateY(-50%);
+  background:none; border:none; color:var(--text-dim); font-size:18px;
+  cursor:pointer; display:none; line-height:1;
+}
+.search-clear.visible { display:block; }
 
-/* ── PLANNER ── */
-.planner { flex:1; overflow-y:auto; padding:14px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
-.day-view { display:none; }
-.day-view.active { display:block; animation:fadeIn 0.25s ease; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+/* Category tabs */
+.cat-tabs {
+  display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+}
+.cat-tabs::-webkit-scrollbar { display:none; }
 
-.day-progress { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:14px 16px; margin-bottom:12px; box-shadow:var(--shadow-sm); }
-.progress-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-.progress-title { font-size:13px; font-weight:600; color:var(--text); }
-.progress-pct { font-family:'Cormorant Garamond',serif; font-size:26px; color:var(--sage); font-weight:600; }
-.progress-track { height:5px; background:var(--card); border-radius:3px; overflow:hidden; }
-.progress-fill { height:100%; background:linear-gradient(90deg,var(--sage-mid),var(--mint)); border-radius:3px; transition:width 0.4s ease; }
-.mini-stats { display:flex; gap:8px; margin-top:10px; }
-.mini-stat { flex:1; background:var(--card); border-radius:10px; padding:7px 8px; text-align:center; }
-.mini-stat-num { font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--text); line-height:1; font-weight:600; }
-.mini-stat-label { font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+.cat-tab {
+  flex-shrink:0; padding:7px 14px; border-radius:20px;
+  border:1.5px solid var(--border); background:var(--surface);
+  font-size:12px; font-weight:500; cursor:pointer;
+  transition:all 0.2s; color:var(--text-mid);
+  display:flex; align-items:center; gap:5px;
+}
+.cat-tab:active { transform:scale(0.96); }
+.cat-tab.active[data-cat="all"]          { background:#1A221B; color:white; border-color:#1A221B; }
+.cat-tab.active[data-cat="batido"]       { background:var(--batido-bg); color:var(--batido); border-color:var(--batido-border); }
+.cat-tab.active[data-cat="complemento"] { background:var(--complemento-bg); color:var(--complemento); border-color:var(--complemento-border); }
+.cat-tab.active[data-cat="colacion"]     { background:var(--colacion-bg); color:var(--colacion); border-color:var(--colacion-border); }
+.cat-tab.active[data-cat="comida"]       { background:var(--comida-bg); color:var(--comida); border-color:var(--comida-border); }
+.cat-tab.active[data-cat="cena"]         { background:var(--cena-bg); color:var(--cena); border-color:var(--cena-border); }
 
-.meal-slot { background:var(--surface); border:1px solid var(--border); border-radius:14px; margin-bottom:10px; overflow:hidden; box-shadow:var(--shadow-sm); transition:border-color 0.2s,box-shadow 0.2s; }
-.meal-slot.drag-over { border-color:var(--sage-mid); box-shadow:0 0 0 3px var(--sage-light); }
-.slot-header { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border); }
-.slot-badge { padding:3px 9px; border-radius:20px; font-size:10px; font-weight:600; }
-.slot-badge.desayuno { background:var(--breakfast-bg); color:var(--breakfast); }
-.slot-badge.colacion { background:var(--snack-bg); color:var(--snack); }
-.slot-badge.comida { background:var(--lunch-bg); color:var(--lunch); }
-.slot-badge.cena { background:var(--dinner-bg); color:var(--dinner); }
-.slot-time { font-size:10px; color:var(--text-dim); margin-left:auto; }
-.slot-body { padding:10px; min-height:66px; }
-.drop-hint { display:flex; align-items:center; justify-content:center; height:44px; border:1.5px dashed var(--border-dark); border-radius:10px; color:var(--text-dim); font-size:11px; gap:5px; transition:all 0.2s; }
-.meal-slot.drag-over .drop-hint { border-color:var(--sage-mid); color:var(--sage); background:var(--sage-light); }
+/* ── CONTENT ── */
+.content { padding:16px; max-width:700px; margin:0 auto; padding-bottom:80px; }
 
-.placed-meal { display:flex; align-items:center; gap:8px; padding:9px 11px; background:var(--card); border-radius:10px; margin-bottom:6px; border:1px solid var(--border); transition:all 0.2s; animation:slideIn 0.22s ease; }
-@keyframes slideIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
-.placed-meal.eaten { background:var(--snack-bg); border-color:#B8D8BA; }
-.placed-meal.eaten .meal-text { text-decoration:line-through; color:var(--text-dim); }
-.meal-check { width:22px; height:22px; border-radius:6px; border:1.5px solid var(--border-dark); background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; font-size:11px; color:white; }
-.placed-meal.eaten .meal-check { background:var(--sage); border-color:var(--sage); }
-.meal-text { flex:1; font-size:12px; color:var(--text); line-height:1.3; cursor:pointer; }
-.meal-text:hover { color:var(--mint); text-decoration:underline; }
-.meal-info { width:22px; height:22px; border-radius:6px; background:transparent; border:none; color:var(--text-dim); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; transition:all 0.15s; }
-.meal-info:active { background:var(--lunch-bg); color:var(--lunch); }
-.meal-remove { width:22px; height:22px; border-radius:6px; background:transparent; border:none; color:var(--text-dim); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1; flex-shrink:0; transition:all 0.15s; }
-.meal-remove:active { background:var(--terra-light); color:var(--terracotta); }
+/* Section headers */
+.section-header {
+  display:flex; align-items:center; gap:10px;
+  margin:20px 0 12px;
+}
+.section-header:first-child { margin-top:4px; }
 
-/* ── WEEK OVERVIEW ── */
-.week-overview { display:none; }
-.week-overview.active { display:block; animation:fadeIn 0.25s ease; }
-.week-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
-.week-day-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 6px; cursor:pointer; transition:all 0.18s; min-height:110px; box-shadow:var(--shadow-sm); }
-.week-day-card:active { transform:scale(0.97); border-color:var(--sage-mid); }
-.week-day-name { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); margin-bottom:7px; text-align:center; }
-.week-meal-dot { width:6px; height:6px; border-radius:50%; margin:2px auto; }
-.week-progress-mini { margin-top:8px; height:3px; background:var(--card); border-radius:2px; overflow:hidden; }
-.week-progress-fill { height:100%; background:var(--sage); border-radius:2px; }
-.week-day-count { font-size:9px; color:var(--text-dim); text-align:center; margin-top:4px; }
+.section-badge {
+  padding:5px 14px; border-radius:20px;
+  font-size:12px; font-weight:600; letter-spacing:0.3px;
+}
+.section-badge.batido       { background:var(--batido-bg); color:var(--batido); border:1.5px solid var(--batido-border); }
+.section-badge.complemento  { background:var(--complemento-bg); color:var(--complemento); border:1.5px solid var(--complemento-border); }
+.section-badge.colacion      { background:var(--colacion-bg); color:var(--colacion); border:1.5px solid var(--colacion-border); }
+.section-badge.comida        { background:var(--comida-bg); color:var(--comida); border:1.5px solid var(--comida-border); }
+.section-badge.cena          { background:var(--cena-bg); color:var(--cena); border:1.5px solid var(--cena-border); }
 
-/* ── RECIPE MODAL ── */
+.section-count {
+  font-size:11px; color:var(--text-dim); font-weight:500;
+}
+
+.section-line { flex:1; height:1px; background:var(--border); }
+
+/* Recipe grid */
+.recipe-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+  gap:10px;
+}
+
+@media(min-width:480px) {
+  .recipe-grid { grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); }
+}
+
+/* Recipe card */
+.recipe-card {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:14px; padding:14px 13px;
+  cursor:pointer; transition:all 0.2s;
+  box-shadow:var(--shadow-sm);
+  display:flex; flex-direction:column; gap:8px;
+  position:relative; overflow:hidden;
+}
+.recipe-card::before {
+  content:''; position:absolute; top:0; left:0;
+  width:3px; height:100%; transition:width 0.2s;
+}
+.recipe-card.batido::before       { background:var(--batido); }
+.recipe-card.complemento::before  { background:var(--complemento); }
+.recipe-card.colacion::before      { background:var(--colacion); }
+.recipe-card.comida::before        { background:var(--comida); }
+.recipe-card.cena::before          { background:var(--cena); }
+
+.recipe-card:active { transform:scale(0.97); box-shadow:none; }
+.recipe-card:hover  { box-shadow:var(--shadow); border-color:var(--border-dark); }
+
+.card-name {
+  font-size:13px; font-weight:500; color:var(--text);
+  line-height:1.35;
+}
+
+.card-footer {
+  display:flex; align-items:center; justify-content:space-between;
+}
+
+.card-tag {
+  font-size:9px; font-weight:600; letter-spacing:0.3px;
+  text-transform:uppercase;
+}
+.card-tag.batido       { color:var(--batido); }
+.card-tag.complemento  { color:var(--complemento); }
+.card-tag.colacion      { color:var(--colacion); }
+.card-tag.comida        { color:var(--comida); }
+.card-tag.cena          { color:var(--cena); }
+
+.card-arrow { font-size:14px; color:var(--text-dim); }
+
+/* Empty state */
+.empty-state {
+  text-align:center; padding:48px 24px;
+  color:var(--text-dim);
+}
+.empty-state .icon { font-size:40px; margin-bottom:12px; }
+.empty-state p { font-size:14px; line-height:1.6; }
+
+/* ── MODAL ── */
 .modal-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:500;
-  display:flex; align-items:flex-end; justify-content:center;
+  position:fixed; inset:0; background:rgba(0,0,0,0.4);
+  z-index:500; display:flex; align-items:flex-end; justify-content:center;
   opacity:0; pointer-events:none; transition:opacity 0.25s;
 }
 .modal-overlay.open { opacity:1; pointer-events:all; }
+
 .modal {
   background:var(--surface); border-radius:24px 24px 0 0;
-  width:100%; max-width:560px; max-height:88vh;
-  overflow-y:auto; scrollbar-width:thin;
-  padding:0 0 32px;
+  width:100%; max-width:600px; max-height:90vh;
+  overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent;
   transform:translateY(40px); transition:transform 0.3s ease;
+  padding-bottom:40px;
 }
 .modal-overlay.open .modal { transform:translateY(0); }
-.modal-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:14px auto 0; }
-.modal-header { padding:16px 20px 12px; border-bottom:1px solid var(--border); }
-.modal-cat { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
-.modal-cat.desayuno { color:var(--breakfast); }
-.modal-cat.colacion { color:var(--snack); }
-.modal-cat.comida { color:var(--lunch); }
-.modal-cat.cena { color:var(--dinner); }
-.modal-title { font-family:'Cormorant Garamond',serif; font-size:26px; color:var(--mint); line-height:1.2; }
-.modal-close { position:absolute; top:16px; right:16px; width:32px; height:32px; border-radius:50%; background:var(--card); border:none; cursor:pointer; font-size:18px; color:var(--text-mid); display:flex; align-items:center; justify-content:center; }
-.modal-section { padding:16px 20px 0; }
-.modal-section-title { font-size:10px; text-transform:uppercase; letter-spacing:2px; color:var(--text-dim); font-weight:600; margin-bottom:10px; }
-.ingredient-list { display:flex; flex-direction:column; gap:6px; }
-.ingredient-item { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--card); border-radius:10px; }
-.ingredient-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
-.ingredient-dot.desayuno { background:var(--breakfast); }
-.ingredient-dot.colacion { background:var(--snack); }
-.ingredient-dot.comida { background:var(--lunch); }
-.ingredient-dot.cena { background:var(--dinner); }
-.ingredient-text { font-size:13px; color:var(--text); }
-.step-list { display:flex; flex-direction:column; gap:8px; }
-.step-item { display:flex; gap:12px; }
-.step-num { width:24px; height:24px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:white; margin-top:1px; }
-.step-num.desayuno { background:var(--breakfast); }
-.step-num.colacion { background:var(--snack); }
-.step-num.comida { background:var(--lunch); }
-.step-num.cena { background:var(--dinner); }
-.step-text { font-size:13px; color:var(--text); line-height:1.5; padding-top:3px; }
-.modal-add-btn { margin:20px 20px 0; width:calc(100% - 40px); padding:14px; background:var(--sage); color:white; border:none; border-radius:12px; font-family:'Outfit',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-.modal-add-btn:active { background:var(--mint); transform:scale(0.98); }
 
-/* ── MOBILE DRAWER ── */
-.drawer-toggle { display:none; position:fixed; bottom:20px; right:20px; width:52px; height:52px; border-radius:50%; background:var(--sage); border:none; color:white; font-size:22px; cursor:pointer; box-shadow:0 4px 20px rgba(79,126,82,0.4); z-index:200; align-items:center; justify-content:center; transition:all 0.2s; }
-.drawer-toggle:active { transform:scale(0.95); }
-.drawer { display:none; position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--border); border-radius:22px 22px 0 0; z-index:300; max-height:72vh; transform:translateY(100%); transition:transform 0.3s ease; padding:0 14px 24px; box-shadow:var(--shadow-lg); }
-.drawer.open { transform:translateY(0); }
-.drawer-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:12px auto 14px; }
-.drawer-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.drawer-search { flex:1; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:7px 10px 7px 26px; color:var(--text); font-size:12px; font-family:'Outfit',sans-serif; outline:none; }
-.drawer-search-wrap { position:relative; flex:1; }
-.drawer-search-icon { position:absolute; left:8px; top:50%; transform:translateY(-50%); font-size:12px; }
-.drawer-filter-row { display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; scrollbar-width:none; }
-.drawer-filter-row::-webkit-scrollbar { display:none; }
-.drawer-chips { display:grid; grid-template-columns:1fr 1fr; gap:6px; max-height:52vh; overflow-y:auto; padding-bottom:4px; }
-.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:250; }
-.overlay.open { display:block; }
-
-/* TOAST */
-.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(16px); background:var(--mint); color:white; padding:10px 18px; border-radius:20px; font-size:13px; font-weight:600; opacity:0; transition:all 0.3s; z-index:600; white-space:nowrap; box-shadow:var(--shadow); }
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-/* RESPONSIVE */
-@media (max-width:640px) {
-  .sidebar { display:none; }
-  .drawer-toggle { display:flex; }
-  .drawer { display:block; }
-  .week-grid { grid-template-columns:repeat(3,1fr); }
-  .app-body { height:calc(100vh - 120px); }
+.modal-handle {
+  width:36px; height:4px; background:var(--border);
+  border-radius:2px; margin:14px auto 0;
 }
+
+.modal-top {
+  position:relative; padding:16px 20px 14px;
+  border-bottom:1px solid var(--border);
+}
+
+.modal-cat-badge {
+  display:inline-block; padding:3px 10px; border-radius:20px;
+  font-size:10px; font-weight:600; letter-spacing:0.5px;
+  text-transform:uppercase; margin-bottom:8px;
+}
+.modal-cat-badge.batido       { background:var(--batido-bg); color:var(--batido); }
+.modal-cat-badge.complemento  { background:var(--complemento-bg); color:var(--complemento); }
+.modal-cat-badge.colacion      { background:var(--colacion-bg); color:var(--colacion); }
+.modal-cat-badge.comida        { background:var(--comida-bg); color:var(--comida); }
+.modal-cat-badge.cena          { background:var(--cena-bg); color:var(--cena); }
+
+.modal-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px; color:var(--mint); line-height:1.2;
+}
+
+.modal-close {
+  position:absolute; top:16px; right:16px;
+  width:34px; height:34px; border-radius:50%;
+  background:var(--card); border:1px solid var(--border);
+  cursor:pointer; font-size:20px; color:var(--text-mid);
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.15s; line-height:1;
+}
+.modal-close:active { background:var(--card); transform:scale(0.92); }
+
+.modal-section { padding:16px 20px 0; }
+
+.modal-section-title {
+  font-size:10px; text-transform:uppercase; letter-spacing:2px;
+  color:var(--text-dim); font-weight:600; margin-bottom:10px;
+}
+
+.ingredient-list { display:flex; flex-direction:column; gap:5px; }
+
+.ingredient-item {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 12px; background:var(--card); border-radius:10px;
+}
+.ingredient-dot {
+  width:6px; height:6px; border-radius:50%; flex-shrink:0;
+}
+.ingredient-dot.batido       { background:var(--batido); }
+.ingredient-dot.complemento  { background:var(--complemento); }
+.ingredient-dot.colacion      { background:var(--colacion); }
+.ingredient-dot.comida        { background:var(--comida); }
+.ingredient-dot.cena          { background:var(--cena); }
+
+.ingredient-text { font-size:13px; color:var(--text); line-height:1.3; }
+
+.step-list { display:flex; flex-direction:column; gap:10px; }
+
+.step-item { display:flex; gap:12px; }
+
+.step-num {
+  width:26px; height:26px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:600; color:white; margin-top:1px;
+}
+.step-num.batido       { background:var(--batido); }
+.step-num.complemento  { background:var(--complemento); }
+.step-num.colacion      { background:var(--colacion); }
+.step-num.comida        { background:var(--comida); }
+.step-num.cena          { background:var(--cena); }
+
+.step-text { font-size:13px; color:var(--text); line-height:1.55; padding-top:4px; }
+
+/* Tip box */
+.tip-box {
+  margin:14px 20px 0;
+  padding:12px 14px; border-radius:12px;
+  background:var(--sage-light); border:1px solid #B8D8BA;
+  font-size:12px; color:var(--mint); line-height:1.5;
+}
+.tip-box strong { display:block; margin-bottom:2px; font-size:10px; letter-spacing:1px; text-transform:uppercase; }
+
+/* ── FLOATING COUNT ── */
+.fab-count {
+  position:fixed; bottom:20px; right:20px;
+  background:var(--mint); color:white;
+  border-radius:20px; padding:10px 16px;
+  font-size:12px; font-weight:600;
+  box-shadow:0 4px 16px rgba(45,94,48,0.35);
+  display:none; align-items:center; gap:6px;
+  z-index:200;
+}
+.fab-count.visible { display:flex; }
+
 ::-webkit-scrollbar { width:4px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
@@ -232,571 +317,471 @@ body { background:var(--bg); font-family:'Outfit',sans-serif; color:var(--text);
 <body>
 
 <div class="header">
-  <div class="header-top">
+  <div class="header-row">
     <div class="app-title">
-      <span>Planeador</span>
-      Mi Menú Semanal
+      <span>Mis Recetas</span>
+      Menú Semanal
     </div>
-    <div class="week-nav">
-      <button class="week-btn" onclick="changeWeek(-1)">‹</button>
-      <span class="week-label" id="weekLabel">Esta semana</span>
-      <button class="week-btn" onclick="changeWeek(1)">›</button>
-    </div>
+    <div class="header-count" id="headerCount">45 recetas</div>
   </div>
-  <div class="day-tabs" id="dayTabs"></div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Buscar receta..." oninput="handleSearch(this.value)">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
+  </div>
+  <div class="cat-tabs" id="catTabs">
+    <div class="cat-tab active" data-cat="all" onclick="setCategory('all')">✨ Todas</div>
+    <div class="cat-tab" data-cat="batido" onclick="setCategory('batido')">🥤 Batidos</div>
+    <div class="cat-tab" data-cat="complemento" onclick="setCategory('complemento')">🍳 Complementos</div>
+    <div class="cat-tab" data-cat="colacion" onclick="setCategory('colacion')">🍎 Colaciones</div>
+    <div class="cat-tab" data-cat="comida" onclick="setCategory('comida')">🥗 Comidas</div>
+    <div class="cat-tab" data-cat="cena" onclick="setCategory('cena')">🌙 Cenas</div>
+  </div>
 </div>
 
-<div class="app-body">
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-title">Recetas — toca 👁 para ver</div>
-      <div class="filter-pills" id="filterPills">
-        <div class="filter-pill active" data-filter="all" onclick="setFilter('all')">Todas</div>
-        <div class="filter-pill active" data-filter="desayuno" onclick="setFilter('desayuno')">☀️</div>
-        <div class="filter-pill active" data-filter="colacion" onclick="setFilter('colacion')">🍎</div>
-        <div class="filter-pill active" data-filter="comida" onclick="setFilter('comida')">🥗</div>
-        <div class="filter-pill active" data-filter="cena" onclick="setFilter('cena')">🌙</div>
-      </div>
-    </div>
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Buscar receta..." id="searchInput" oninput="filterRecipes()">
-    </div>
-    <div class="recipe-bank" id="recipeBankDesktop"></div>
-  </div>
+<div class="content" id="content"></div>
 
-  <div class="planner" id="plannerArea"></div>
-</div>
-
-<!-- Mobile -->
-<button class="drawer-toggle" onclick="toggleDrawer()">🍽️</button>
-<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
-<div class="drawer" id="drawer">
-  <div class="drawer-handle"></div>
-  <div class="drawer-top">
-    <div class="drawer-search-wrap">
-      <span class="drawer-search-icon">🔍</span>
-      <input class="drawer-search" type="text" placeholder="Buscar receta..." oninput="filterRecipes(this.value)">
-    </div>
-  </div>
-  <div class="drawer-filter-row" id="drawerFilters">
-    <div class="filter-pill active" data-filter="all" onclick="setFilter('all',true)">Todas</div>
-    <div class="filter-pill active" data-filter="desayuno" onclick="setFilter('desayuno',true)">☀️ Desayuno</div>
-    <div class="filter-pill active" data-filter="colacion" onclick="setFilter('colacion',true)">🍎 Colación</div>
-    <div class="filter-pill active" data-filter="comida" onclick="setFilter('comida',true)">🥗 Comida</div>
-    <div class="filter-pill active" data-filter="cena" onclick="setFilter('cena',true)">🌙 Cena</div>
-  </div>
-  <div class="drawer-chips" id="recipeBankMobile"></div>
-</div>
-
-<!-- Recipe Modal -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" id="recipeModal">
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
     <div class="modal-handle"></div>
-    <div style="position:relative">
-      <div class="modal-header">
-        <div class="modal-cat" id="modalCat"></div>
-        <div class="modal-title" id="modalTitle"></div>
-      </div>
-      <button class="modal-close" onclick="closeModalDirect()">×</button>
+    <div class="modal-top">
+      <div class="modal-cat-badge" id="modalBadge"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" onclick="closeModal()">×</button>
     </div>
     <div class="modal-section">
       <div class="modal-section-title">Ingredientes</div>
       <div class="ingredient-list" id="modalIngredients"></div>
     </div>
-    <div class="modal-section" style="margin-top:14px">
+    <div class="modal-section" style="margin-top:16px">
       <div class="modal-section-title">Preparación</div>
       <div class="step-list" id="modalSteps"></div>
     </div>
-    <button class="modal-add-btn" id="modalAddBtn">＋ Agregar a mi menú del día</button>
+    <div id="modalTip"></div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-// ── RECIPES DATA ──────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+//  RECETAS — Agrega aquí tus nuevas recetas fácilmente
+//  Formato: { id, name, cat, ingredients[], steps[], tip? }
+//  Categorías: 'batido' | 'complemento' | 'colacion' | 'comida' | 'cena'
+// ─────────────────────────────────────────────────────────
 const RECIPES = [
-  {id:'d1', name:'Smoothie Verde', cat:'desayuno',
-   ingredients:['1 tza leche de almendra','1/2 plátano','2 tzas espinaca','3 nueces'],
-   steps:['Licúa todos los ingredientes hasta obtener una mezcla homogénea.','Sirve inmediatamente.']},
-  {id:'d2', name:'Smoothie Guayaba Colada', cat:'desayuno',
-   ingredients:['1 tza leche de coco','2 guayabas sin semillas','1 cda coco rallado'],
-   steps:['Licúa todos los ingredientes.','Sirve frío.']},
-  {id:'d3', name:'Smoothie Durazno', cat:'desayuno',
-   ingredients:['1 tza leche de avena','1 durazno mediano','3 nueces','2 cdas amaranto'],
-   steps:['Licúa leche, durazno y nueces.','Agrega el amaranto al servir.']},
-  {id:'d4', name:'Smoothie Vainilla', cat:'desayuno',
-   ingredients:['1 tza leche de almendra','1/2 plátano','3 nueces','1/2 cdita esencia de vainilla','2 cdas avena en hojuelas'],
-   steps:['Licúa todos los ingredientes hasta lograr textura cremosa.','Sirve de inmediato.']},
-  {id:'d5', name:'Smoothie Rosa', cat:'desayuno',
-   ingredients:['1 tza leche de almendra','1 tza fresas','1 cda coco rallado','2 cdas amaranto natural'],
-   steps:['Licúa leche, fresas y coco.','Agrega el amaranto al servir y mezcla.']},
-  {id:'d6', name:'Smoothie Invierno 25', cat:'desayuno',
-   ingredients:['1 tza leche de avena','1 manzana','1 trozo de canela','2 cdas crema de almendras'],
-   steps:['Licúa todos los ingredientes.','Sirve frío o a temperatura ambiente.']},
-  {id:'d7', name:'Jugo Verde Otoño', cat:'desayuno',
-   ingredients:['1 tza agua','1/2 pepino','1 manzana','1 tza espinaca'],
-   steps:['Licúa o extrae en extractor todos los ingredientes.','Sirve de inmediato sin colar.']},
-  {id:'d8', name:'Jugo Corazoncito', cat:'desayuno',
-   ingredients:['1 tza agua','2 cdas blueberries','1/2 tza fresas','1 guayaba sin semillas','5 almendras'],
-   steps:['Licúa todos los ingredientes.','Sirve frío.']},
-  {id:'d9', name:'Jugo Verde Básico', cat:'desayuno',
-   ingredients:['1 tza agua','1 tza espinaca','1/4 pepino','1 manzana','jugo de 1 limón','1 trocito de jengibre'],
-   steps:['Licúa agua, espinaca, pepino, manzana y jengibre.','Agrega el limón al final y mezcla. Sirve de inmediato.']},
-  {id:'d10', name:'Jugo Verde Claro', cat:'desayuno',
-   ingredients:['1 tza agua','1/4 tza uvas verdes','2 tzas espinaca','hojas de menta al gusto'],
-   steps:['Licúa todos los ingredientes.','Sirve frío sin colar.']},
-  {id:'d11', name:'Wrapp Primavera', cat:'desayuno',
-   ingredients:['1 pan pita integral chico','1 tza mix de lechuga','4 reb jamón de pavo','30 gr queso panela','1/3 aguacate','mayonesa al gusto'],
-   steps:['Calienta el pan pita.','Unta la mayonesa y agrega el resto de los ingredientes.','Dobla y sirve.']},
-  {id:'d12', name:'Huevo Completo con Champiñón', cat:'desayuno',
-   ingredients:['1 huevo + 4 claras','1 tza champiñones','1/3 aguacate','1 paq Salmas'],
-   steps:['Pica los champiñones y coloca en un sartén a fuego medio.','Una vez cocidos, agrega el huevo revuelto y espera a que se cueza.','Sirve con el aguacate y las Salmas.']},
-  {id:'d13', name:'Toast de Huevo Duro', cat:'desayuno',
-   ingredients:['1 huevo + 4 claras','1 cda mayonesa de aguacate o 1/3 aguacate','cilantro al gusto','1 reb pan Nature\'s Own Sugar Free'],
-   steps:['Pon a cocer el huevo. Ya duro, pélalo y pícalo.','Agrega la mayonesa o aguacate con el cilantro y mezcla bien.','Agrega la mezcla a un pan previamente tostado.']},
-  {id:'d14', name:'Omelette de Espinaca', cat:'desayuno',
-   ingredients:['4 claras de huevo','1 huevo','1 tza espinaca','cebolla al gusto','1 paq Salmas'],
-   steps:['Pica la cebolla y la espinaca.','Coloca las claras y el huevo en un sartén y agrega la verdura picada.','Prepara como cualquier omelette. Acompaña con Salmas.']},
-  {id:'d15', name:'Omelette de Jitomate', cat:'desayuno',
-   ingredients:['3 huevos','1 jitomate en rebanadas','orégano al gusto','1 paq Salmas','1/3 aguacate'],
-   steps:['Coloca en un sartén las rebanadas de jitomate con orégano. Que no se encimen.','Ya cocidas, agrega el huevo previamente revuelto.','Espera a que cueza y dobla. Rellena con el aguacate.']},
-  {id:'d16', name:'Pan Francés con Blueberries', cat:'desayuno',
-   ingredients:['2 reb pan Nature\'s Own Sugar Free','2 huevos','canela al gusto','1 tza frutos rojos','jugo de limón','1 cda xilitol'],
-   steps:['Revuelve el huevo y agrega la canela.','Pasa el pan por el huevo y lleva a sartén caliente hasta dorar.','Coulis: coloca los frutos en una olla con limón y xilitol. Eso será tu mermelada.']},
-  {id:'d17', name:'Sándwich Grill', cat:'desayuno',
-   ingredients:['2 reb pan Nature\'s Own Sugar Free','1/3 aguacate','2 reb jamón','rebanadas de jitomate','30 gr queso panela'],
-   steps:['Unta el aguacate sobre el pan previamente tostado.','Agrega el jamón y finaliza con el jitomate y el queso.','Lleva al sartén o plancha hasta que el queso se funda.']},
-  {id:'d18', name:'Mousse de Chocolate Alto en Proteína', cat:'desayuno',
-   ingredients:['90 gr queso cottage','1 cda xilitol','2 cdas cocoa en polvo','10 fresas','2 cdas amaranto','3 nueces'],
-   steps:['Licúa el queso con el xilitol y la cocoa.','En un frasco, pon una capa de queso y una de fresas, y así sucesivamente.','Refrigera toda la noche. Al día siguiente agrega las nueces y amaranto.']},
-  {id:'d19', name:'Avocado Toast', cat:'desayuno',
-   ingredients:['1 reb pan Nature\'s Own Sugar Free','1/3 aguacate','1 huevo entero + 2 claras','60 gr queso panela','pimienta','jugo de 1 limón','1 tza arúgula'],
-   steps:['Muele el aguacate con jugo de limón.','Prepara el huevo: cocido, revuelto o estrellado.','Unta el aguacate sobre el pan tostado, agrega el huevo, arúgula, sal y pimienta.']},
-  {id:'d20', name:'Pita con Jocoque', cat:'desayuno',
-   ingredients:['1 pan pita','4 reb jamón','2 cdas jocoque','60 gr queso panela','1/3 aguacate'],
-   steps:['Calienta el pan pita.','Rellena con todos los ingredientes.','Sirve de inmediato.']},
-  {id:'d21', name:'Sincronizada Avocado', cat:'desayuno',
-   ingredients:['1 pan pita integral','1 tza mix de lechuga','4 reb jamón de pavo','30 gr queso panela','1/3 aguacate','salsa mexicana (jitomate, cebolla, cilantro, limón, aceite de olivo)'],
-   steps:['Prepara la salsa mexicana mezclando jitomate, cebolla, cilantro, limón y aceite.','Arma la sincronizada y lleva al comal o sartén.','Deja la lechuga y salsa aparte para agregar al servir.']},
-  {id:'d22', name:'Huevo con Salsa Mediterránea', cat:'desayuno',
-   ingredients:['2 claras de huevo','1 huevo','1 jitomate','cilantro','jugo de 1 limón','1 cdita aceite de olivo','toque de sal'],
-   steps:['Pica el jitomate y cilantro, agrega aceite y limón. Usa 4 cdas de esta mezcla.','Revuelve las claras con el huevo y pon a cocer.','Acompaña el huevo con la salsa mediterránea.']},
-  // COLACIONES
-  {id:'c1', name:'Guayaba + Nueces', cat:'colacion',
-   ingredients:['1 guayaba sin semillas','3 nueces'],
-   steps:['Parte la guayaba y acompaña con las nueces.']},
-  {id:'c2', name:'Manzana + Almendras', cat:'colacion',
-   ingredients:['1 manzana','10 almendras'],
-   steps:['Rebana la manzana y acompaña con las almendras.']},
-  {id:'c3', name:'Pepino con Limón + Cacahuates', cat:'colacion',
-   ingredients:['1 tza pepino en bastones','jugo de limón','sal al gusto','30 cacahuates'],
-   steps:['Parte el pepino en bastones, agrega limón y sal.','Acompaña con los cacahuates.']},
-  {id:'c4', name:'Jícama + Tajín + Pistaches', cat:'colacion',
-   ingredients:['1 tza jícama en bastones','tajín light al gusto','jugo de limón','18 pistaches'],
-   steps:['Parte la jícama, agrega limón y tajín.','Acompaña con los pistaches.']},
-  {id:'c5', name:'Fresas + Nueces', cat:'colacion',
-   ingredients:['10 fresas','3 nueces'],
-   steps:['Lava las fresas y acompaña con las nueces.']},
-  {id:'c6', name:'Blueberries + Yogurt + Almendras', cat:'colacion',
-   ingredients:['1/3 tza blueberries','2 cdas yogurt','10 almendras'],
-   steps:['Mezcla el yogurt con los blueberries.','Acompaña con las almendras.']},
-  {id:'c7', name:'Pera + Nueces', cat:'colacion',
-   ingredients:['1 pera','3 nueces'],
-   steps:['Rebana la pera y acompaña con las nueces.']},
-  {id:'c8', name:'Jícama con Sal y Limón', cat:'colacion',
-   ingredients:['1 tza jícama','sal','jugo de limón'],
-   steps:['Parte la jícama en bastones. Agrega sal y limón al gusto.']},
-  {id:'c9', name:'Pepino con Sal y Limón', cat:'colacion',
-   ingredients:['1 tza pepino en bastones','sal','jugo de limón'],
-   steps:['Parte el pepino, agrega sal y limón al gusto.']},
-  {id:'c10', name:'Apio con Sal y Limón', cat:'colacion',
-   ingredients:['1 tza apio','sal','jugo de limón'],
-   steps:['Corta el apio en bastones y agrega sal y limón.']},
-  // COMIDAS
-  {id:'m1', name:'Salmón con Ensalada de Fresas', cat:'comida',
-   ingredients:['160 gr salmón asado','2 tzas mix de lechugas','5 fresas picadas','hojas de menta','30 gr queso panela','3 nueces','1/4 pepino','jugo de limón'],
-   steps:['Asa el salmón solo con sal.','Mezcla la lechuga, fresas, menta, queso, nueces y pepino.','Agrega jugo de limón a la ensalada. Sirve con el salmón.']},
-  {id:'m2', name:'Ensalada Healthy de Pollo', cat:'comida',
-   ingredients:['160 gr pollo desmenuzado','1 cda mayonesa de aguacate','1/2 pepino picado','1 tza lechuga rallada','1 cdita yogurt griego','chipotle al gusto','cilantro o perejil al gusto','jugo de 1 limón','1/3 aguacate'],
-   steps:['Pica el pepino, cilantro y ralla la lechuga.','Mezcla con el pollo, yogurt, mayonesa, chipotle, perejil, limón y sal.','Aparte pica el aguacate, no lo mezcles para que no se bata.']},
-  {id:'m3', name:'Salmón con Puré y Verduras', cat:'comida',
-   ingredients:['160 gr pescado picado y asado','1 tza ejotes','12 espárragos','1 papa mediana','2 cdas crema light'],
-   steps:['Asa el pescado con un poco de sal.','Hierve los ejotes con los espárragos, agrega pimienta.','Cuece la papa, muélela y agrega crema con sal. Sirve el puré de base, el pescado encima y cubre con las verduras.']},
-  {id:'m4', name:'Salmón con Salsa de Espinaca', cat:'comida',
-   ingredients:['180 gr salmón','4 cdas crema light','1 tza espinaca en tiras','cebolla al gusto','2 tzas mix de lechugas','1/2 manzana picada','5 fresas picadas','1/4 pepino','jugo de limón'],
-   steps:['Salsa: calienta cebolla con 1/2 cdita aceite, agrega espinaca, luego crema. Retira cuando hierva.','Asa el salmón y báñalo con la salsa.','Ensalada: mezcla todos los ingredientes con jugo de limón.']},
-  {id:'m5', name:'Chilaquiles Healthy Vegetarianos', cat:'comida',
-   ingredients:['2 paq Salmas','1 tza salsa verde o roja sin aceite','180 gr queso panela','2 tzas lechuga o espinaca rebanada','1 cda crema light'],
-   steps:['Trocea las Salmas y agrega la salsa.','Agrega el queso, crema y la lechuga por encima.','Sirve de inmediato.']},
-  {id:'m6', name:'Tacos de Carnitas de Atún', cat:'comida',
-   ingredients:['1.5 latas atún en agua drenado','1/3 aguacate','cilantro al gusto','1 zanahoria rallada','cebolla al gusto','1 jitomate','chipotle al gusto o salsa verde','3 tortillas de nopal o 1 de maíz'],
-   steps:['En un sartén coloca la cebolla picada con el jitomate.','Agrega la zanahoria rallada y el atún. Añade chipotle. Deja que se cueza.','Coloca en las tortillas, agrega cilantro y salsa verde.']},
-  {id:'m7', name:'Lasagna Libre de Pasta', cat:'comida',
-   ingredients:['150 gr carne molida de pollo','1 calabaza italiana en rebanadas a lo largo','2 jitomates','ajo al gusto','1 tza champiñones','60 gr queso Oaxaca','1 paq Salmas'],
-   steps:['Cuece las calabazas rebanadas. Licúa el jitomate con el ajo.','Saltea cebolla, agrega champiñones, luego el puré de jitomate. Mezcla con la carne cocida.','En refractario, capas de calabaza y carne. Cubre con queso y hornea hasta fundir.']},
-  {id:'m8', name:'Pescado a la Mandarina', cat:'comida',
-   ingredients:['150 gr pescado blanco','jugo de 1 mandarina','2 tzas espinaca','3/4 pepino','1 jitomate picado','30 gr queso panela','3 nueces','jugo de 1 limón','1 paq Salmas'],
-   steps:['Marina el pescado con jugo de mandarina una noche. Asa al día siguiente.','Pica jitomate, queso panela y pepino.','Mezcla la espinaca con jitomate, pepino, queso y limón. Acompaña con el pescado.']},
-  {id:'m9', name:'Salmón con Salsa de Aguacate y Mango', cat:'comida',
-   ingredients:['150 gr salmón','1/2 pepino','chile verde al gusto','1/2 mango','cebolla morada al gusto','1/3 aguacate','cilantro al gusto','1/2 tza quinoa','5 aceitunas'],
-   steps:['Pica chile, cilantro, cebolla, mango y aguacate. Mezcla y agrega limón.','Asa el salmón y baña con la salsa.','Acompaña con quinoa mezclada con aceitunas picadas.']},
-  {id:'m10', name:'Tostadas de Salmón', cat:'comida',
-   ingredients:['150 gr salmón','sal al gusto','1 cda mayonesa','chipotle al gusto','cilantro','vinagre de arroz','salsa de soya','1/3 aguacate','1 paq Salmas'],
-   steps:['Mezcla la mayonesa, chipotle, cilantro, vinagre y salsa de soya.','Asa el salmón y desmenúzalo.','Agrega la salsa y acompaña con el aguacate y las Salmas.']},
-  {id:'m11', name:'Parrillada de Pollo con Ensalada Otoño', cat:'comida',
-   ingredients:['150 gr milanesa de pollo','1 tza mix de lechugas','1/2 pepino','1 zanahoria rallada','hojas de menta','1 tza kale','jugo de 1 limón','1 cda aceite de olivo','toque de vinagre blanco','1 cda miel','1 cda orégano','sal y pimienta'],
-   steps:['Asa el pollo.','Mezcla el limón, aceite, vinagre, miel, orégano, sal y pimienta para la vinagreta.','Mezcla todas las hojas verdes y báñalas con la vinagreta. Acompaña con el pollo.']},
-  {id:'m12', name:'Pescado a las Hierbas Finas', cat:'comida',
-   ingredients:['150 gr pescado blanco','2 claras','hierbas finas al gusto','4 cdas pan molido','2 tzas mix de lechugas','1/2 tza uvas','1/2 pepino','1 cda arándanos','jugo de 1 limón'],
-   steps:['Empaniza el pescado con las claras, hierbas finas y pan molido. Asa en sartén o freidora de aire.','Mezcla el resto de ingredientes para la ensalada.','Agrega jugo de limón a la ensalada y acompaña con el pescado.']},
-  // CENAS
-  {id:'n1', name:'Sándwich de Alcaparra', cat:'cena',
-   ingredients:['2 rebanadas pan Nature\'s Own Sugar Free','4 rebanadas jamón de pavo','germen de trigo al gusto','1/3 aguacate'],
-   steps:['Calienta el pan y unta el aguacate.','Agrega el jamón de pavo y espolvorea el germen de trigo.','Sirve de inmediato.']},
-  {id:'n2', name:'Bowl Danonino', cat:'cena',
-   ingredients:['150 gr yogurt skyr','3 nueces','1/2 plátano maduro','1 cdita acai','5 fresas','1 cdita nibs de cacao'],
-   steps:['Licúa el yogurt con plátano, nueces y acai.','Deja reposar en refrigeración al menos 30 minutos.','Agrega fresas y nibs de cacao al servir.']},
-  {id:'n3', name:'Pudín de Chía con Yogurt del Bosque', cat:'cena',
-   ingredients:['150 gr yogurt skyr','1/3 tza blueberries','1 cda esencia de vainilla','jugo de limón','5 galletas Marías sin azúcar','1 cda xilitol','3 cdas chía'],
-   steps:['Mezcla el yogurt con el xilitol (solo si necesitas algo dulce), vainilla y limón.','En un frasco: capa de yogurt, capa de galleta y blueberries. Repite.','Mezcla el yogurt con la chía y deja reposar 1 noche. Al día siguiente agrega el resto.']},
-  {id:'n4', name:'Pay de Limón', cat:'cena',
-   ingredients:['150 gr yogurt skyr','1/3 tza blueberries','1 cda esencia de vainilla','jugo de limón','5 galletas Marías sin azúcar','1 cda xilitol'],
-   steps:['Mezcla el yogurt con el xilitol, vainilla y limón.','En un frasco coloca una capa de yogurt, una de galleta y blueberries. Repite.','Refrigera.']},
-  {id:'n5', name:'Snicker Bowl', cat:'cena',
-   ingredients:['1/2 plátano','150 ml yogurt','1 cda nibs de chocolate','1 cda crema de almendra','3 cdas amaranto'],
-   steps:['Licúa el yogurt con el plátano y amaranto.','Sobre el yogurt agrega la crema de almendra y los nibs de cacao por encima.','Sirve frío.']},
-  {id:'n6', name:'Bowl Honey', cat:'cena',
-   ingredients:['150 gr yogurt griego','1 cdita acai','1/2 plátano','1/3 tza blueberries con fresa','3 cdas amaranto'],
-   steps:['Mezcla el acai con el yogurt.','Agrega el plátano, los frutos y el amaranto.','Sirve frío.']},
-  {id:'n7', name:'Bowl Invierno', cat:'cena',
-   ingredients:['150 gr yogurt griego','18 pistaches','1 tza fresas','1 cda crema de cacahuate','3 cdas granola'],
-   steps:['Mezcla el yogurt con la crema de cacahuate.','Pica el pistache y las fresas.','Agrega todo al yogurt y finaliza con la granola.']},
-  {id:'n8', name:'Bowl Dubai', cat:'cena',
-   ingredients:['150 ml yogurt','18 pistaches','1 tza fresas','1 cdita cocoa en polvo','1 cda crema de almendras'],
-   steps:['Mezcla la crema de almendras con el yogurt y la cocoa.','Pica los pistaches.','Agrega al yogurt los pistaches y las fresas picadas.']},
-  {id:'n9', name:'Pizza Margarita Healthy', cat:'cena',
-   ingredients:['1 pan pita','60 gr queso mozzarella','hojas de albahaca','1 jitomate','orégano seco al gusto','cebolla al gusto'],
-   steps:['Licúa el jitomate con un poco de cebolla. Cocina en olla con orégano y albahaca.','Agrega al pan pita la salsa, trozos de queso mozzarella y más hojas de albahaca.','Mete al horno hasta que se derrita el queso.']},
-  {id:'n10', name:'Bowl Acai Dulce', cat:'cena',
-   ingredients:['150 gr yogurt griego','1/2 plátano','1 cda acai','3 cdas amaranto','1/2 tza frutos rojos','3 nueces picadas'],
-   steps:['Mezcla el acai con el yogurt.','Agrega el plátano y los frutos rojos.','Finaliza con el amaranto y las nueces.']},
-  {id:'n11', name:'Bowl Alto en Cacao', cat:'cena',
-   ingredients:['150 gr yogurt griego','1 cda crema de almendras','1 tza fresas','3 cdas amaranto','1 cda nibs de chocolate'],
-   steps:['Mezcla el yogurt con la crema de almendras.','Agrega las fresas picadas y el amaranto.','Finaliza con los nibs de chocolate por encima.']},
-  {id:'n12', name:'Fresas con Yogurt', cat:'cena',
-   ingredients:['150 gr yogurt griego','1 tza fresas','1 cda coco rallado','3 nueces'],
-   steps:['Pica o tritura las fresas y agrega el yogurt.','Agrega el coco y las nueces.','Sirve frío.']},
+
+  // ── BATIDOS ──────────────────────────────────────────
+  { id:'b1', name:'Smoothie Verde', cat:'batido',
+    ingredients:['1 tza leche de almendra','1/2 plátano','2 tzas espinaca','3 nueces'],
+    steps:['Licúa todos los ingredientes hasta obtener una mezcla homogénea.','Sirve inmediatamente.'],
+    tip:'Puedes agregar hielos para una textura más fría.' },
+
+  { id:'b2', name:'Smoothie Guayaba Colada', cat:'batido',
+    ingredients:['1 tza leche de coco','2 guayabas sin semillas','1 cda coco rallado'],
+    steps:['Licúa todos los ingredientes.','Sirve frío.'] },
+
+  { id:'b3', name:'Smoothie Durazno', cat:'batido',
+    ingredients:['1 tza leche de avena','1 durazno mediano','3 nueces','2 cdas amaranto'],
+    steps:['Licúa leche, durazno y nueces.','Agrega el amaranto al servir.'] },
+
+  { id:'b4', name:'Smoothie Vainilla', cat:'batido',
+    ingredients:['1 tza leche de almendra','1/2 plátano','3 nueces','1/2 cdita esencia de vainilla','2 cdas avena en hojuelas'],
+    steps:['Licúa todos los ingredientes hasta lograr textura cremosa.','Sirve de inmediato.'],
+    tip:'La vainilla ayuda a reducir el antojo por dulce durante el día.' },
+
+  { id:'b5', name:'Smoothie Rosa', cat:'batido',
+    ingredients:['1 tza leche de almendra','1 tza fresas','1 cda coco rallado','2 cdas amaranto natural'],
+    steps:['Licúa leche, fresas y coco.','Agrega el amaranto al servir y mezcla.'] },
+
+  { id:'b6', name:'Smoothie Invierno 25', cat:'batido',
+    ingredients:['1 tza leche de avena','1 manzana','1 trozo de canela','2 cdas crema de almendras'],
+    steps:['Licúa todos los ingredientes.','Sirve frío o a temperatura ambiente.'],
+    tip:'La canela regula la glucosa desde el primer tiempo del día.' },
+
+  { id:'b7', name:'Jugo Verde Otoño', cat:'batido',
+    ingredients:['1 tza agua','1/2 pepino','1 manzana','1 tza espinaca'],
+    steps:['Licúa o extrae en extractor todos los ingredientes.','Sirve de inmediato sin colar.'] },
+
+  { id:'b8', name:'Jugo Corazoncito', cat:'batido',
+    ingredients:['1 tza agua','2 cdas blueberries','1/2 tza fresas','1 guayaba sin semillas','5 almendras'],
+    steps:['Licúa todos los ingredientes.','Sirve frío.'] },
+
+  { id:'b9', name:'Jugo Verde Básico', cat:'batido',
+    ingredients:['1 tza agua','1 tza espinaca','1/4 pepino','1 manzana','jugo de 1 limón','1 trocito de jengibre'],
+    steps:['Licúa agua, espinaca, pepino, manzana y jengibre.','Agrega el limón al final y mezcla.','Sirve de inmediato.'],
+    tip:'El jengibre es antiinflamatorio y activa el metabolismo.' },
+
+  { id:'b10', name:'Jugo Verde Claro', cat:'batido',
+    ingredients:['1 tza agua','1/4 tza uvas verdes','2 tzas espinaca','hojas de menta al gusto'],
+    steps:['Licúa todos los ingredientes.','Sirve frío sin colar.'] },
+
+  // ── COMPLEMENTOS ─────────────────────────────────────
+  { id:'c1', name:'Wrapp Primavera', cat:'complemento',
+    ingredients:['1 pan pita integral chico','1 tza mix de lechuga','4 reb jamón de pavo','30 gr queso panela','1/3 aguacate','mayonesa al gusto'],
+    steps:['Calienta el pan pita.','Unta la mayonesa y agrega el resto de los ingredientes.','Dobla y sirve.'] },
+
+  { id:'c2', name:'Huevo Completo con Champiñón', cat:'complemento',
+    ingredients:['1 huevo + 4 claras','1 tza champiñones','1/3 aguacate','1 paq Salmas'],
+    steps:['Pica los champiñones y coloca en un sartén a fuego medio.','Una vez cocidos, agrega el huevo revuelto y espera a que se cueza.','Sirve con el aguacate y las Salmas.'] },
+
+  { id:'c3', name:'Toast de Huevo Duro', cat:'complemento',
+    ingredients:['1 huevo + 4 claras','1 cda mayonesa de aguacate o 1/3 aguacate','cilantro al gusto','1 reb pan Nature\'s Own Sugar Free'],
+    steps:['Pon a cocer el huevo. Ya duro, pélalo y pícalo.','Agrega la mayonesa o aguacate con el cilantro y mezcla bien.','Agrega la mezcla a un pan previamente tostado.'] },
+
+  { id:'c4', name:'Omelette de Espinaca', cat:'complemento',
+    ingredients:['4 claras de huevo','1 huevo','1 tza espinaca','cebolla al gusto','1 paq Salmas'],
+    steps:['Pica la cebolla y la espinaca.','Coloca las claras y el huevo en un sartén y agrega la verdura picada.','Prepara como cualquier omelette. Acompaña con Salmas.'] },
+
+  { id:'c5', name:'Omelette de Jitomate', cat:'complemento',
+    ingredients:['3 huevos','1 jitomate en rebanadas','orégano al gusto','1 paq Salmas','1/3 aguacate'],
+    steps:['Coloca en un sartén las rebanadas de jitomate con orégano.','Ya cocidas, agrega el huevo previamente revuelto.','Espera a que cueza, dobla y rellena con el aguacate.'] },
+
+  { id:'c6', name:'Pan Francés con Blueberries', cat:'complemento',
+    ingredients:['2 reb pan Nature\'s Own Sugar Free','2 huevos','canela al gusto','1 tza frutos rojos','jugo de limón','1 cda xilitol'],
+    steps:['Revuelve el huevo y agrega la canela.','Pasa el pan por el huevo y lleva a sartén caliente hasta dorar.','Coulis: coloca los frutos en olla con limón y xilitol. Eso será tu mermelada.'],
+    tip:'El xilitol tiene índice glucémico muy bajo vs el azúcar normal.' },
+
+  { id:'c7', name:'Sándwich Grill', cat:'complemento',
+    ingredients:['2 reb pan Nature\'s Own Sugar Free','1/3 aguacate','2 reb jamón','rebanadas de jitomate','30 gr queso panela'],
+    steps:['Unta el aguacate sobre el pan previamente tostado.','Agrega el jamón y finaliza con el jitomate y el queso.','Lleva al sartén o plancha hasta que el queso se funda.'] },
+
+  { id:'c8', name:'Mousse de Chocolate Alto en Proteína', cat:'complemento',
+    ingredients:['90 gr queso cottage','1 cda xilitol','2 cdas cocoa en polvo','10 fresas','2 cdas amaranto','3 nueces'],
+    steps:['Licúa el queso con el xilitol y la cocoa.','En un frasco, pon una capa de queso y una de fresas. Repite.','Refrigera toda la noche. Al día siguiente agrega las nueces y amaranto.'],
+    tip:'El queso cottage tiene ~14g de proteína por 90gr — el complemento más proteico.' },
+
+  { id:'c9', name:'Avocado Toast', cat:'complemento',
+    ingredients:['1 reb pan Nature\'s Own Sugar Free','1/3 aguacate','1 huevo entero + 2 claras','60 gr queso panela','pimienta','jugo de 1 limón','1 tza arúgula'],
+    steps:['Muele el aguacate con jugo de limón.','Prepara el huevo: cocido, revuelto o estrellado.','Unta el aguacate sobre el pan tostado, agrega el huevo, arúgula, sal y pimienta.'] },
+
+  { id:'c10', name:'Pita con Jocoque', cat:'complemento',
+    ingredients:['1 pan pita','4 reb jamón','2 cdas jocoque','60 gr queso panela','1/3 aguacate'],
+    steps:['Calienta el pan pita.','Rellena con todos los ingredientes.','Sirve de inmediato.'],
+    tip:'El jocoque es un probiótico fermentado que mejora la microbiota intestinal.' },
+
+  { id:'c11', name:'Sincronizada Avocado', cat:'complemento',
+    ingredients:['1 pan pita integral','1 tza mix de lechuga','4 reb jamón de pavo','30 gr queso panela','1/3 aguacate','salsa mexicana (jitomate, cebolla, cilantro, limón, aceite de olivo)'],
+    steps:['Prepara la salsa mexicana mezclando todos sus ingredientes.','Arma la sincronizada y lleva al comal o sartén hasta fundir el queso.','Deja la lechuga y salsa aparte para agregar al servir.'] },
+
+  { id:'c12', name:'Huevo con Salsa Mediterránea', cat:'complemento',
+    ingredients:['2 claras de huevo','1 huevo','1 jitomate','cilantro','jugo de 1 limón','1 cdita aceite de olivo','toque de sal'],
+    steps:['Pica el jitomate y cilantro, agrega aceite y limón. Usa 4 cdas de esta mezcla.','Revuelve las claras con el huevo y pon a cocer.','Acompaña el huevo con la salsa mediterránea.'] },
+
+  // ── COLACIONES ───────────────────────────────────────
+  { id:'col1', name:'Guayaba + Nueces', cat:'colacion',
+    ingredients:['1 guayaba sin semillas','3 nueces'],
+    steps:['Parte la guayaba y acompaña con las nueces.'],
+    tip:'La guayaba tiene más vitamina C que la naranja.' },
+
+  { id:'col2', name:'Manzana + Almendras', cat:'colacion',
+    ingredients:['1 manzana','10 almendras'],
+    steps:['Rebana la manzana y acompaña con las almendras.'] },
+
+  { id:'col3', name:'Pepino con Limón + Cacahuates', cat:'colacion',
+    ingredients:['1 tza pepino en bastones','jugo de limón','sal al gusto','30 cacahuates'],
+    steps:['Parte el pepino en bastones, agrega limón y sal.','Acompaña con los cacahuates.'] },
+
+  { id:'col4', name:'Jícama + Tajín + Pistaches', cat:'colacion',
+    ingredients:['1 tza jícama en bastones','tajín light al gusto','jugo de limón','18 pistaches'],
+    steps:['Parte la jícama, agrega limón y tajín.','Acompaña con los pistaches.'],
+    tip:'La jícama es prebiótica y alimenta tu microbiota intestinal.' },
+
+  { id:'col5', name:'Fresas + Nueces', cat:'colacion',
+    ingredients:['10 fresas','3 nueces'],
+    steps:['Lava las fresas y acompaña con las nueces.'] },
+
+  { id:'col6', name:'Blueberries + Yogurt + Almendras', cat:'colacion',
+    ingredients:['1/3 tza blueberries','2 cdas yogurt','10 almendras'],
+    steps:['Mezcla el yogurt con los blueberries.','Acompaña con las almendras.'],
+    tip:'La colación más completa: proteína + antioxidante + grasa buena.' },
+
+  { id:'col7', name:'Pera + Nueces', cat:'colacion',
+    ingredients:['1 pera','3 nueces'],
+    steps:['Rebana la pera y acompaña con las nueces.'] },
+
+  { id:'col8', name:'Pepino con Sal y Limón', cat:'colacion',
+    ingredients:['1 tza pepino en bastones','sal','jugo de limón'],
+    steps:['Parte el pepino en bastones.','Agrega sal y limón al gusto.'] },
+
+  { id:'col9', name:'Jícama con Sal y Limón', cat:'colacion',
+    ingredients:['1 tza jícama','sal','jugo de limón'],
+    steps:['Parte la jícama en bastones.','Agrega sal y limón al gusto.'] },
+
+  { id:'col10', name:'Apio con Sal y Limón', cat:'colacion',
+    ingredients:['1 tza apio','sal','jugo de limón'],
+    steps:['Corta el apio en bastones.','Agrega sal y limón al gusto.'] },
+
+  // ── COMIDAS ──────────────────────────────────────────
+  { id:'m1', name:'Salmón con Ensalada de Fresas', cat:'comida',
+    ingredients:['160 gr salmón asado','2 tzas mix de lechugas','5 fresas picadas','hojas de menta','30 gr queso panela','3 nueces','1/4 pepino','jugo de limón'],
+    steps:['Asa el salmón solo con sal.','Mezcla la lechuga, fresas, menta, queso, nueces y pepino.','Agrega jugo de limón a la ensalada y sirve con el salmón.'],
+    tip:'Omega-3 del salmón + antioxidantes de las fresas = combo antiinflamatorio potente.' },
+
+  { id:'m2', name:'Ensalada Healthy de Pollo', cat:'comida',
+    ingredients:['160 gr pollo desmenuzado','1 cda mayonesa de aguacate','1/2 pepino picado','1 tza lechuga rallada','1 cdita yogurt griego','chipotle al gusto','cilantro o perejil al gusto','jugo de 1 limón','1/3 aguacate'],
+    steps:['Pica el pepino, cilantro y ralla la lechuga.','Mezcla con el pollo, yogurt, mayonesa, chipotle, perejil, limón y sal.','Aparte pica el aguacate, no lo mezcles para que no se bata.'] },
+
+  { id:'m3', name:'Salmón con Puré y Verduras', cat:'comida',
+    ingredients:['160 gr pescado asado','1 tza ejotes','12 espárragos','1 papa mediana','2 cdas crema light'],
+    steps:['Asa el pescado con un poco de sal.','Hierve los ejotes con los espárragos y agrega pimienta.','Cuece la papa, muélela y agrega crema con sal. Sirve el puré de base, el pescado encima y cubre con las verduras.'] },
+
+  { id:'m4', name:'Salmón con Salsa de Espinaca', cat:'comida',
+    ingredients:['180 gr salmón','4 cdas crema light','1 tza espinaca en tiras','cebolla al gusto','2 tzas mix de lechugas','1/2 manzana picada','5 fresas','1/4 pepino','jugo de limón'],
+    steps:['Salsa: calienta cebolla con 1/2 cdita aceite, agrega espinaca, luego crema. Retira al hervir.','Asa el salmón y báñalo con la salsa.','Ensalada: mezcla todos los ingredientes con jugo de limón.'] },
+
+  { id:'m5', name:'Chilaquiles Healthy Vegetarianos', cat:'comida',
+    ingredients:['2 paq Salmas','1 tza salsa verde o roja sin aceite','180 gr queso panela','2 tzas lechuga o espinaca','1 cda crema light'],
+    steps:['Trocea las Salmas y agrega la salsa.','Agrega el queso y la crema.','Sirve con la lechuga fresca por encima.'],
+    tip:'Versión inteligente de un antojo mexicano clásico.' },
+
+  { id:'m6', name:'Tacos de Carnitas de Atún', cat:'comida',
+    ingredients:['1.5 latas atún en agua drenado','1/3 aguacate','cilantro al gusto','1 zanahoria rallada','cebolla al gusto','1 jitomate','chipotle al gusto o salsa verde','3 tortillas de nopal o 1 de maíz'],
+    steps:['En un sartén saltea la cebolla con el jitomate.','Agrega la zanahoria rallada y el atún con chipotle. Deja cocer.','Sirve en las tortillas con cilantro y salsa verde.'] },
+
+  { id:'m7', name:'Lasagna Libre de Pasta', cat:'comida',
+    ingredients:['150 gr carne molida de pollo','1 calabaza italiana en rebanadas','2 jitomates','ajo al gusto','1 tza champiñones','60 gr queso Oaxaca','1 paq Salmas'],
+    steps:['Cuece las calabazas rebanadas a lo largo. Licúa el jitomate con ajo.','Saltea cebolla, agrega champiñones, luego el puré. Mezcla con la carne cocida.','En refractario: capas de calabaza y carne. Cubre con queso y hornea hasta fundir.'],
+    tip:'La calabaza reemplaza la pasta con 80% menos carbohidratos y más fibra.' },
+
+  { id:'m8', name:'Pescado a la Mandarina', cat:'comida',
+    ingredients:['150 gr pescado blanco','jugo de 1 mandarina','2 tzas espinaca','3/4 pepino','1 jitomate picado','30 gr queso panela','3 nueces','jugo de 1 limón','1 paq Salmas'],
+    steps:['Marina el pescado con jugo de mandarina una noche. Asa al día siguiente.','Pica jitomate, queso panela y pepino.','Mezcla la espinaca con los demás ingredientes y agrega limón. Acompaña con el pescado.'],
+    tip:'La vitamina C de la mandarina mejora la absorción del hierro del pescado.' },
+
+  { id:'m9', name:'Salmón con Salsa de Aguacate y Mango', cat:'comida',
+    ingredients:['150 gr salmón','1/2 pepino','chile verde al gusto','1/2 mango','cebolla morada al gusto','1/3 aguacate','cilantro al gusto','1/2 tza quinoa','5 aceitunas'],
+    steps:['Pica chile, cilantro, cebolla, mango y aguacate. Mezcla y agrega limón.','Asa el salmón y báñalo con la salsa.','Acompaña con quinoa mezclada con aceitunas picadas.'],
+    tip:'La quinoa es el único grano con proteína completa — todos los aminoácidos esenciales.' },
+
+  { id:'m10', name:'Tostadas de Salmón', cat:'comida',
+    ingredients:['150 gr salmón','1 cda mayonesa','chipotle al gusto','cilantro','vinagre de arroz','salsa de soya','1/3 aguacate','1 paq Salmas'],
+    steps:['Mezcla la mayonesa, chipotle, cilantro, vinagre y salsa de soya.','Asa el salmón y desmenúzalo.','Agrega la salsa y acompaña con el aguacate y las Salmas.'],
+    tip:'El vinagre reduce la respuesta glucémica de la comida hasta un 30%.' },
+
+  { id:'m11', name:'Parrillada de Pollo con Ensalada Otoño', cat:'comida',
+    ingredients:['150 gr milanesa de pollo','1 tza mix de lechugas','1/2 pepino','1 zanahoria rallada','hojas de menta','1 tza kale','jugo de 1 limón','1 cda aceite de olivo','1 cda miel','1 cda orégano','sal y pimienta'],
+    steps:['Asa el pollo.','Mezcla el limón, aceite, miel, orégano, sal y pimienta para la vinagreta.','Mezcla todas las hojas verdes y báñalas con la vinagreta. Acompaña con el pollo.'],
+    tip:'El kale es el vegetal más denso nutricionalmente: calcio, hierro, vitamina K, C y A simultáneamente.' },
+
+  { id:'m12', name:'Pescado a las Hierbas Finas', cat:'comida',
+    ingredients:['150 gr pescado blanco','2 claras','hierbas finas al gusto','4 cdas pan molido','2 tzas mix de lechugas','1/2 tza uvas','1/2 pepino','1 cda arándanos','jugo de 1 limón'],
+    steps:['Empaniza el pescado con las claras, hierbas y pan molido.','Asa en sartén o freidora de aire — no en aceite.','Mezcla los ingredientes de la ensalada con jugo de limón y acompaña con el pescado.'] },
+
+  // ── CENAS ────────────────────────────────────────────
+  { id:'n1', name:'Sándwich de Alcaparra', cat:'cena',
+    ingredients:['2 rebanadas pan Nature\'s Own Sugar Free','4 rebanadas jamón de pavo','germen de trigo al gusto','1/3 aguacate'],
+    steps:['Calienta el pan y unta el aguacate.','Agrega el jamón de pavo y espolvorea el germen de trigo.','Sirve de inmediato.'],
+    tip:'El germen de trigo aporta vitamina E y magnesio para la recuperación muscular nocturna.' },
+
+  { id:'n2', name:'Bowl Danonino', cat:'cena',
+    ingredients:['150 gr yogurt skyr','3 nueces','1/2 plátano maduro','1 cdita acai','5 fresas','1 cdita nibs de cacao'],
+    steps:['Licúa el yogurt con plátano, nueces y acai.','Deja reposar en refrigeración al menos 30 minutos.','Agrega fresas y nibs de cacao al servir.'] },
+
+  { id:'n3', name:'Pudín de Chía', cat:'cena',
+    ingredients:['150 gr yogurt skyr','1/3 tza blueberries','1 cda esencia de vainilla','jugo de limón','5 galletas Marías sin azúcar','1 cda xilitol','3 cdas chía'],
+    steps:['Mezcla el yogurt con xilitol, vainilla y limón.','En un frasco: capa de yogurt, galleta y blueberries. Repite.','Agrega la chía al yogurt y deja reposar una noche. Al día siguiente agrega el resto.'],
+    tip:'La chía forma gel en el estómago — saciedad toda la noche sin hambre.' },
+
+  { id:'n4', name:'Pay de Limón', cat:'cena',
+    ingredients:['150 gr yogurt skyr','1/3 tza blueberries','1 cda esencia de vainilla','jugo de limón','5 galletas Marías sin azúcar','1 cda xilitol'],
+    steps:['Mezcla el yogurt con el xilitol, vainilla y limón.','En un frasco coloca capas: yogurt, galleta, blueberries. Repite.','Refrigera hasta servir.'],
+    tip:'Sabe a postre pero el yogurt skyr sigue aportando proteína mientras duermes.' },
+
+  { id:'n5', name:'Snicker Bowl', cat:'cena',
+    ingredients:['1/2 plátano','150 ml yogurt','1 cda nibs de chocolate','1 cda crema de almendra','3 cdas amaranto'],
+    steps:['Licúa el yogurt con el plátano y amaranto.','Sobre el yogurt agrega la crema de almendra y los nibs de cacao por encima.','Sirve frío.'],
+    tip:'Los nibs de cacao aportan magnesio para relajación muscular profunda.' },
+
+  { id:'n6', name:'Bowl Honey', cat:'cena',
+    ingredients:['150 gr yogurt griego','1 cdita acai','1/2 plátano','1/3 tza blueberries con fresa','3 cdas amaranto'],
+    steps:['Mezcla el acai con el yogurt.','Agrega el plátano, los frutos y el amaranto.','Sirve frío.'] },
+
+  { id:'n7', name:'Bowl Invierno', cat:'cena',
+    ingredients:['150 gr yogurt griego','18 pistaches','1 tza fresas','1 cda crema de cacahuate','3 cdas granola'],
+    steps:['Mezcla el yogurt con la crema de cacahuate.','Pica el pistache y las fresas.','Agrega todo al yogurt y finaliza con la granola.'],
+    tip:'Los pistaches contienen melatonina natural — mejoran la calidad del sueño.' },
+
+  { id:'n8', name:'Bowl Dubai', cat:'cena',
+    ingredients:['150 ml yogurt','18 pistaches','1 tza fresas','1 cdita cocoa en polvo','1 cda crema de almendras'],
+    steps:['Mezcla la crema de almendras con el yogurt y la cocoa.','Pica los pistaches.','Agrega al yogurt los pistaches y las fresas picadas.'],
+    tip:'La cocoa + crema de almendras = antojo de chocolate resuelto sin azúcar.' },
+
+  { id:'n9', name:'Pizza Margarita Healthy', cat:'cena',
+    ingredients:['1 pan pita','60 gr queso mozzarella','hojas de albahaca','1 jitomate','orégano seco al gusto','cebolla al gusto'],
+    steps:['Licúa el jitomate con cebolla. Cocina en olla con orégano y albahaca.','Agrega al pan pita la salsa, trozos de mozzarella y hojas de albahaca.','Mete al horno hasta que se derrita el queso.'],
+    tip:'La albahaca es un adaptógeno natural que reduce el cortisol — ideal para días estresantes.' },
+
+  { id:'n10', name:'Bowl Acai Dulce', cat:'cena',
+    ingredients:['150 gr yogurt griego','1/2 plátano','1 cda acai','3 cdas amaranto','1/2 tza frutos rojos','3 nueces picadas'],
+    steps:['Mezcla el acai con el yogurt.','Agrega el plátano y los frutos rojos.','Finaliza con el amaranto y las nueces.'],
+    tip:'La cena con mayor concentración de antioxidantes de todos los menús.' },
+
+  { id:'n11', name:'Bowl Alto en Cacao', cat:'cena',
+    ingredients:['150 gr yogurt griego','1 cda crema de almendras','1 tza fresas','3 cdas amaranto','1 cda nibs de chocolate'],
+    steps:['Mezcla el yogurt con la crema de almendras.','Agrega las fresas picadas y el amaranto.','Finaliza con los nibs de chocolate por encima.'],
+    tip:'La cena más efectiva para reducir cortisol nocturno — clave en días de estrés alto.' },
+
+  { id:'n12', name:'Fresas con Yogurt', cat:'cena',
+    ingredients:['150 gr yogurt griego','1 tza fresas','1 cda coco rallado','3 nueces'],
+    steps:['Pica o tritura las fresas y agrega el yogurt.','Agrega el coco y las nueces.','Sirve frío.'],
+    tip:'La cena más simple y ligera — perfecta cuando quieres algo muy fácil.' },
 ];
 
-const SLOTS = [
-  {key:'desayuno', label:'Desayuno', time:'7–9 AM'},
-  {key:'colacion', label:'Colación AM', time:'10–11 AM'},
-  {key:'comida', label:'Comida', time:'1–3 PM'},
-  {key:'colacion2', label:'Colación PM', time:'4–5 PM'},
-  {key:'cena', label:'Cena', time:'7–8 PM'},
-];
+// ─────────────────────────────────────────────────────────
+//  CONFIGURACIÓN DE CATEGORÍAS
+// ─────────────────────────────────────────────────────────
+const CATS = {
+  batido:      { label:'🥤 Batidos & Jugos',  emoji:'🥤' },
+  complemento: { label:'🍳 Complementos',      emoji:'🍳' },
+  colacion:    { label:'🍎 Colaciones',         emoji:'🍎' },
+  comida:      { label:'🥗 Comidas',            emoji:'🥗' },
+  cena:        { label:'🌙 Cenas',              emoji:'🌙' },
+};
 
-const DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-const FULL_DAYS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+// ─────────────────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────────────────
+let activeCategory = 'all';
+let searchTerm = '';
 
-let currentDay = 0;
-let currentWeekOffset = 0;
-let activeFilter = 'all';
-let dragItem = null;
-let currentModalRecipe = null;
-const plan = {};
+// ─────────────────────────────────────────────────────────
+//  RENDER
+// ─────────────────────────────────────────────────────────
+function render() {
+  const content = document.getElementById('content');
+  content.innerHTML = '';
 
-function getWeekKey(){ return `w${currentWeekOffset}`; }
-function getDayPlan(day){ const wk=getWeekKey(); if(!plan[wk])plan[wk]={}; if(!plan[wk][day])plan[wk][day]={}; return plan[wk][day]; }
-function savePlan(){ try{localStorage.setItem('menuPlanV2',JSON.stringify(plan));}catch(e){} }
-function loadPlan(){ try{const s=localStorage.getItem('menuPlanV2');if(s)Object.assign(plan,JSON.parse(s));}catch(e){} }
-
-loadPlan();
-buildTabs();
-buildPlanner();
-buildRecipeBank();
-updateWeekLabel();
-
-function buildTabs(){
-  const tabs=document.getElementById('dayTabs');
-  tabs.innerHTML='';
-  const ov=document.createElement('div');
-  ov.className='day-tab'+(currentDay===-1?' active':'');
-  ov.innerHTML='📅 Semana';
-  ov.onclick=()=>selectDay(-1);
-  tabs.appendChild(ov);
-  DAYS.forEach((d,i)=>{
-    const tab=document.createElement('div');
-    tab.className='day-tab'+(currentDay===i?' active':'');
-    tab.id=`tab-${i}`;
-    tab.innerHTML=`<div class="day-dot"></div><span>${d}</span>`;
-    tab.onclick=()=>selectDay(i);
-    tabs.appendChild(tab);
-    updateTabDot(i);
+  const filtered = RECIPES.filter(r => {
+    const matchCat = activeCategory === 'all' || r.cat === activeCategory;
+    const matchSearch = r.name.toLowerCase().includes(searchTerm) ||
+                        r.ingredients.some(i => i.toLowerCase().includes(searchTerm));
+    return matchCat && matchSearch;
   });
-}
 
-function updateTabDot(i){
-  const tab=document.getElementById(`tab-${i}`);
-  if(!tab)return;
-  const dp=getDayPlan(i);
-  const has=SLOTS.some(s=>(dp[s.key]||[]).length>0);
-  tab.classList.toggle('has-meals',has);
-}
+  document.getElementById('headerCount').textContent = filtered.length + ' recetas';
 
-function selectDay(idx){
-  currentDay=idx;
-  buildTabs();
-  document.querySelectorAll('.day-view').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('.week-overview').forEach(e=>e.classList.remove('active'));
-  if(idx===-1){ document.getElementById('weekOverview').classList.add('active'); buildWeekOverview(); }
-  else{ const dv=document.getElementById(`day-${idx}`); if(dv)dv.classList.add('active'); updateDayProgress(idx); }
-}
+  if (filtered.length === 0) {
+    content.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>No encontramos recetas para "<strong>${searchTerm}</strong>".<br>Intenta con otro término.</p></div>`;
+    return;
+  }
 
-function buildPlanner(){
-  const area=document.getElementById('plannerArea');
-  area.innerHTML='';
-  const wo=document.createElement('div');
-  wo.className='week-overview'+(currentDay===-1?' active':'');
-  wo.id='weekOverview';
-  area.appendChild(wo);
-  DAYS.forEach((d,i)=>{
-    const view=document.createElement('div');
-    view.className='day-view'+(currentDay===i?' active':'');
-    view.id=`day-${i}`;
-    // progress
-    const prog=document.createElement('div');
-    prog.className='day-progress';
-    prog.innerHTML=`<div class="progress-row"><span class="progress-title">${FULL_DAYS[i]}</span><span class="progress-pct" id="pct-${i}">0%</span></div><div class="progress-track"><div class="progress-fill" id="pfill-${i}" style="width:0%"></div></div><div class="mini-stats"><div class="mini-stat"><div class="mini-stat-num" id="stt-${i}">0</div><div class="mini-stat-label">Planeadas</div></div><div class="mini-stat"><div class="mini-stat-num" id="ste-${i}">0</div><div class="mini-stat-label">Comidas ✓</div></div><div class="mini-stat"><div class="mini-stat-num" id="stp-${i}">0</div><div class="mini-stat-label">Pendientes</div></div></div>`;
-    view.appendChild(prog);
-    SLOTS.forEach(slot=>{
-      const slotEl=document.createElement('div');
-      slotEl.className='meal-slot';
-      slotEl.dataset.day=i;
-      slotEl.dataset.slot=slot.key;
-      const catClass=slot.key.replace('2','');
-      slotEl.innerHTML=`<div class="slot-header"><div class="slot-badge ${catClass}">${slot.label}</div><div class="slot-time">${slot.time}</div></div><div class="slot-body" id="slot-${i}-${slot.key}"><div class="drop-hint">＋ Arrastra una receta aquí</div></div>`;
-      slotEl.addEventListener('dragover',e=>{e.preventDefault();slotEl.classList.add('drag-over');});
-      slotEl.addEventListener('dragleave',()=>slotEl.classList.remove('drag-over'));
-      slotEl.addEventListener('drop',e=>{e.preventDefault();slotEl.classList.remove('drag-over');handleDrop(i,slot.key);});
-      slotEl.addEventListener('touchend',e=>handleTouchDrop(e,i,slot.key),{passive:false});
-      view.appendChild(slotEl);
+  const catsToShow = activeCategory === 'all'
+    ? Object.keys(CATS)
+    : [activeCategory];
+
+  catsToShow.forEach(cat => {
+    const recipes = filtered.filter(r => r.cat === cat);
+    if (recipes.length === 0) return;
+
+    // Section header
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.innerHTML = `
+      <div class="section-badge ${cat}">${CATS[cat].label}</div>
+      <div class="section-count">${recipes.length}</div>
+      <div class="section-line"></div>`;
+    content.appendChild(header);
+
+    // Grid
+    const grid = document.createElement('div');
+    grid.className = 'recipe-grid';
+
+    recipes.forEach(recipe => {
+      const card = document.createElement('div');
+      card.className = `recipe-card ${recipe.cat}`;
+      card.innerHTML = `
+        <div class="card-name">${recipe.name}</div>
+        <div class="card-footer">
+          <div class="card-tag ${recipe.cat}">${recipe.ingredients.length} ingredientes</div>
+          <div class="card-arrow">›</div>
+        </div>`;
+      card.onclick = () => openModal(recipe.id);
+      grid.appendChild(card);
     });
-    area.appendChild(view);
-    renderDaySlots(i);
+
+    content.appendChild(grid);
   });
 }
 
-function buildRecipeBank(searchTerm=''){
-  renderBank('recipeBankDesktop',false,searchTerm);
-  renderBank('recipeBankMobile',true,searchTerm);
-}
-
-function renderBank(containerId,mobile,searchTerm=''){
-  const container=document.getElementById(containerId);
-  if(!container)return;
-  container.innerHTML='';
-  const search=(searchTerm||document.getElementById('searchInput')?.value||'').toLowerCase();
-  const filtered=RECIPES.filter(r=>{
-    const matchCat=activeFilter==='all'||r.cat===activeFilter;
-    const matchSearch=r.name.toLowerCase().includes(search);
-    return matchCat&&matchSearch;
+// ─────────────────────────────────────────────────────────
+//  CATEGORY FILTER
+// ─────────────────────────────────────────────────────────
+function setCategory(cat) {
+  activeCategory = cat;
+  document.querySelectorAll('.cat-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.cat === cat);
   });
-  filtered.forEach(recipe=>{
-    const chip=document.createElement('div');
-    chip.className='recipe-chip';
-    chip.draggable=true;
-    chip.dataset.id=recipe.id;
-    chip.dataset.name=recipe.name;
-    chip.dataset.cat=recipe.cat;
-    chip.innerHTML=`<div class="chip-eye" onclick="openModal('${recipe.id}',event)">👁</div><div class="chip-name">${recipe.name}</div><div class="chip-cat ${recipe.cat}">${catLabel(recipe.cat)}</div>`;
-    chip.addEventListener('dragstart',e=>{dragItem={name:recipe.name,cat:recipe.cat};chip.classList.add('dragging');e.dataTransfer.effectAllowed='copy';});
-    chip.addEventListener('dragend',()=>chip.classList.remove('dragging'));
-    chip.addEventListener('touchstart',handleTouchStart,{passive:true});
-    chip.addEventListener('touchmove',handleTouchMove,{passive:false});
-    // tap to open modal on mobile
-    let tapTimer;
-    chip.addEventListener('touchend',e=>{
-      clearTimeout(tapTimer);
-      tapTimer=setTimeout(()=>{
-        if(!touchDragItem||!touchMoved) openModal(recipe.id,e);
-        touchMoved=false; touchDragItem=null;
-      },50);
-    });
-    container.appendChild(chip);
-  });
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function catLabel(cat){ return {desayuno:'☀️ Desayuno',colacion:'🍎 Colación',comida:'🥗 Comida',cena:'🌙 Cena'}[cat]||cat; }
-
-// ── DRAG ──
-function handleDrop(dayIdx,slotKey){ if(!dragItem)return; addMealToSlot(dayIdx,slotKey,dragItem.name); dragItem=null; if(document.getElementById('drawer').classList.contains('open'))toggleDrawer(); }
-let touchDragItem=null, touchGhost=null, touchMoved=false;
-function handleTouchStart(e){ const chip=e.currentTarget; touchDragItem={name:chip.dataset.name,cat:chip.dataset.cat}; touchMoved=false; }
-function handleTouchMove(e){ e.preventDefault(); touchMoved=true; const touch=e.touches[0]; if(!touchGhost){touchGhost=document.createElement('div');touchGhost.style.cssText='position:fixed;z-index:9999;background:var(--sage);color:white;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600;pointer-events:none;max-width:160px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,0.2);';touchGhost.textContent=touchDragItem?.name||'';document.body.appendChild(touchGhost);} touchGhost.style.left=(touch.clientX-80)+'px'; touchGhost.style.top=(touch.clientY-24)+'px'; }
-function handleTouchDrop(e,dayIdx,slotKey){ if(touchGhost){touchGhost.remove();touchGhost=null;} if(!touchDragItem||!touchMoved)return; addMealToSlot(dayIdx,slotKey,touchDragItem.name); touchDragItem=null; touchMoved=false; if(document.getElementById('drawer').classList.contains('open'))toggleDrawer(); }
-document.addEventListener('touchend',()=>{if(touchGhost){touchGhost.remove();touchGhost=null;}});
-
-// ── MEALS ──
-function addMealToSlot(dayIdx,slotKey,mealName){
-  const dp=getDayPlan(dayIdx);
-  if(!dp[slotKey])dp[slotKey]=[];
-  if(dp[slotKey].find(m=>m.name===mealName)){showToast('Ya está en este tiempo 👀');return;}
-  dp[slotKey].push({name:mealName,eaten:false});
-  savePlan();
-  renderDaySlots(dayIdx);
-  updateDayProgress(dayIdx);
-  updateTabDot(dayIdx);
-  showToast('✓ Agregado al menú');
+// ─────────────────────────────────────────────────────────
+//  SEARCH
+// ─────────────────────────────────────────────────────────
+function handleSearch(val) {
+  searchTerm = val.toLowerCase().trim();
+  document.getElementById('searchClear').classList.toggle('visible', val.length > 0);
+  render();
 }
 
-function toggleEaten(dayIdx,slotKey,mealIdx){
-  const dp=getDayPlan(dayIdx);
-  if(!dp[slotKey]||!dp[slotKey][mealIdx])return;
-  dp[slotKey][mealIdx].eaten=!dp[slotKey][mealIdx].eaten;
-  savePlan(); renderDaySlots(dayIdx); updateDayProgress(dayIdx);
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').classList.remove('visible');
+  searchTerm = '';
+  render();
 }
 
-function removeMeal(dayIdx,slotKey,mealIdx){
-  const dp=getDayPlan(dayIdx);
-  if(!dp[slotKey])return;
-  dp[slotKey].splice(mealIdx,1);
-  savePlan(); renderDaySlots(dayIdx); updateDayProgress(dayIdx); updateTabDot(dayIdx);
-}
+// ─────────────────────────────────────────────────────────
+//  MODAL
+// ─────────────────────────────────────────────────────────
+function openModal(recipeId) {
+  const recipe = RECIPES.find(r => r.id === recipeId);
+  if (!recipe) return;
 
-function renderDaySlots(dayIdx){
-  const dp=getDayPlan(dayIdx);
-  SLOTS.forEach(slot=>{
-    const body=document.getElementById(`slot-${dayIdx}-${slot.key}`);
-    if(!body)return;
-    const meals=dp[slot.key]||[];
-    if(meals.length===0){
-      body.innerHTML='<div class="drop-hint">＋ Arrastra una receta aquí</div>';
-    } else {
-      body.innerHTML=meals.map((m,idx)=>`
-        <div class="placed-meal ${m.eaten?'eaten':''}">
-          <button class="meal-check" onclick="toggleEaten(${dayIdx},'${slot.key}',${idx})">${m.eaten?'✓':''}</button>
-          <div class="meal-text" onclick="openModalByName('${m.name.replace(/'/g,"\\'")}')">${m.name}</div>
-          <button class="meal-info" onclick="openModalByName('${m.name.replace(/'/g,"\\'")}')">📋</button>
-          <button class="meal-remove" onclick="removeMeal(${dayIdx},'${slot.key}',${idx})">×</button>
-        </div>`).join('')+
-        '<div class="drop-hint" style="margin-top:6px;height:36px;font-size:10px">＋ agregar otro</div>';
-    }
-  });
-}
+  document.getElementById('modalBadge').textContent = CATS[recipe.cat].label;
+  document.getElementById('modalBadge').className = `modal-cat-badge ${recipe.cat}`;
+  document.getElementById('modalTitle').textContent = recipe.name;
 
-function updateDayProgress(dayIdx){
-  const dp=getDayPlan(dayIdx);
-  let total=0,eaten=0;
-  SLOTS.forEach(s=>{const m=dp[s.key]||[];total+=m.length;eaten+=m.filter(x=>x.eaten).length;});
-  const pct=total===0?0:Math.round((eaten/total)*100);
-  const pctEl=document.getElementById(`pct-${dayIdx}`);
-  const fillEl=document.getElementById(`pfill-${dayIdx}`);
-  if(pctEl)pctEl.textContent=pct+'%';
-  if(fillEl)fillEl.style.width=pct+'%';
-  ['stt','ste','stp'].forEach((id,i)=>{const el=document.getElementById(`${id}-${dayIdx}`);if(el)el.textContent=[total,eaten,total-eaten][i];});
-}
+  document.getElementById('modalIngredients').innerHTML = recipe.ingredients
+    .map(ing => `<div class="ingredient-item"><div class="ingredient-dot ${recipe.cat}"></div><div class="ingredient-text">${ing}</div></div>`)
+    .join('');
 
-// ── WEEK OVERVIEW ──
-function buildWeekOverview(){
-  const wo=document.getElementById('weekOverview');
-  wo.innerHTML='<div class="week-grid" id="weekGrid"></div>';
-  const grid=document.getElementById('weekGrid');
-  DAYS.forEach((d,i)=>{
-    const dp=getDayPlan(i);
-    let total=0,eaten=0;
-    SLOTS.forEach(s=>{const m=dp[s.key]||[];total+=m.length;eaten+=m.filter(x=>x.eaten).length;});
-    const pct=total===0?0:Math.round((eaten/total)*100);
-    const card=document.createElement('div');
-    card.className='week-day-card';
-    card.onclick=()=>selectDay(i);
-    let dots='';
-    const colors={desayuno:'var(--breakfast)',colacion:'var(--snack)',comida:'var(--lunch)',colacion2:'var(--snack)',cena:'var(--dinner)'};
-    SLOTS.forEach(s=>{if((dp[s.key]||[]).length>0)dots+=`<div class="week-meal-dot" style="background:${colors[s.key]}"></div>`;});
-    card.innerHTML=`<div class="week-day-name">${d}</div>${dots||'<div style="font-size:9px;color:var(--text-dim);text-align:center">Sin planear</div>'}<div class="week-progress-mini"><div class="week-progress-fill" style="width:${pct}%"></div></div><div class="week-day-count">${total} recetas</div>`;
-    grid.appendChild(card);
-  });
-}
+  document.getElementById('modalSteps').innerHTML = recipe.steps
+    .map((s, i) => `<div class="step-item"><div class="step-num ${recipe.cat}">${i + 1}</div><div class="step-text">${s}</div></div>`)
+    .join('');
 
-// ── MODAL ──
-function openModal(recipeId,e){
-  if(e){e.stopPropagation();e.preventDefault();}
-  const recipe=RECIPES.find(r=>r.id===recipeId);
-  if(!recipe)return;
-  showRecipeModal(recipe);
-}
+  const tipEl = document.getElementById('modalTip');
+  if (recipe.tip) {
+    tipEl.innerHTML = `<div class="tip-box"><strong>💡 Por qué es buena para ti</strong>${recipe.tip}</div>`;
+  } else {
+    tipEl.innerHTML = '';
+  }
 
-function openModalByName(name){
-  const recipe=RECIPES.find(r=>r.name===name);
-  if(!recipe)return;
-  showRecipeModal(recipe);
-}
-
-function showRecipeModal(recipe){
-  currentModalRecipe=recipe;
-  document.getElementById('modalCat').textContent=catLabel(recipe.cat);
-  document.getElementById('modalCat').className='modal-cat '+recipe.cat;
-  document.getElementById('modalTitle').textContent=recipe.name;
-  document.getElementById('modalIngredients').innerHTML=recipe.ingredients.map(ing=>`<div class="ingredient-item"><div class="ingredient-dot ${recipe.cat}"></div><div class="ingredient-text">${ing}</div></div>`).join('');
-  document.getElementById('modalSteps').innerHTML=recipe.steps.map((s,i)=>`<div class="step-item"><div class="step-num ${recipe.cat}">${i+1}</div><div class="step-text">${s}</div></div>`).join('');
-  const addBtn=document.getElementById('modalAddBtn');
-  addBtn.onclick=()=>addFromModal();
   document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-function addFromModal(){
-  if(!currentModalRecipe)return;
-  if(currentDay<0){showToast('Selecciona un día primero');return;}
-  const slotMap={desayuno:'desayuno',colacion:'colacion',comida:'comida',cena:'cena'};
-  const slotKey=slotMap[currentModalRecipe.cat]||'desayuno';
-  addMealToSlot(currentDay,slotKey,currentModalRecipe.name);
-  closeModalDirect();
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
-function closeModal(e){ if(e.target===document.getElementById('modalOverlay'))closeModalDirect(); }
-function closeModalDirect(){ document.getElementById('modalOverlay').classList.remove('open'); }
-
-// ── FILTERS ──
-function setFilter(filter,mobile=false){
-  activeFilter=filter;
-  ['filterPills','drawerFilters'].forEach(id=>{
-    const pills=document.getElementById(id);
-    if(!pills)return;
-    pills.querySelectorAll('.filter-pill').forEach(p=>{p.classList.toggle('active',p.dataset.filter===filter||filter==='all');});
-  });
-  buildRecipeBank();
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
 }
 
-function filterRecipes(val){
-  buildRecipeBank(val||'');
-}
+// Close on swipe down
+let touchStartY = 0;
+document.getElementById('modal').addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+document.getElementById('modal').addEventListener('touchmove', e => {
+  const modal = document.getElementById('modal');
+  if (modal.scrollTop === 0 && e.touches[0].clientY - touchStartY > 60) closeModal();
+}, { passive: true });
 
-// ── WEEK NAV ──
-function changeWeek(dir){ currentWeekOffset+=dir; updateWeekLabel(); buildTabs(); buildPlanner(); }
-function updateWeekLabel(){
-  const el=document.getElementById('weekLabel');
-  if(currentWeekOffset===0)el.textContent='Esta semana';
-  else if(currentWeekOffset===1)el.textContent='Próx. semana';
-  else if(currentWeekOffset===-1)el.textContent='Sem. pasada';
-  else el.textContent=`Semana ${currentWeekOffset>0?'+':''}${currentWeekOffset}`;
-}
-
-// ── DRAWER ──
-function toggleDrawer(){
-  const drawer=document.getElementById('drawer');
-  const overlay=document.getElementById('overlay');
-  drawer.classList.toggle('open');
-  overlay.classList.toggle('open');
-}
-
-// ── TOAST ──
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),1800);
-}
+// ─────────────────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────────────────
+render();
 </script>
 </body>
 </html>

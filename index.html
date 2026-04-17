@@ -271,8 +271,14 @@ body {
 ══════════════════════════════════════ */
 .content { padding:16px; max-width:700px; margin:0 auto; padding-bottom:80px; }
 
-.section-header { display:flex; align-items:center; gap:12px; margin:24px 0 14px; }
+.section-header {
+  display:flex; align-items:center; gap:12px;
+  margin:24px 0 14px;
+  cursor:pointer; user-select:none; -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
 .section-header:first-child { margin-top:4px; }
+.section-header:active { opacity:0.75; }
 .section-badge { padding:6px 16px; border-radius:20px; font-size:var(--f-title); font-weight:600; }
 .section-badge.batido      { background:var(--batido-bg); color:var(--batido); border:1.5px solid var(--batido-border); }
 .section-badge.complemento { background:var(--complemento-bg); color:var(--complemento); border:1.5px solid var(--complemento-border); }
@@ -281,9 +287,27 @@ body {
 .section-badge.cena         { background:var(--cena-bg); color:var(--cena); border:1.5px solid var(--cena-border); }
 .section-count { font-size:var(--f-body); color:var(--text-dim); font-weight:500; }
 .section-line { flex:1; height:1px; background:var(--border); }
-
-.recipe-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:12px; }
+.section-chevron {
+  font-size:13px; color:var(--text-dim);
+  transition:transform 0.25s ease;
+  flex-shrink:0;
+}
+.section-header.collapsed .section-chevron { transform:rotate(-90deg); }
+.recipe-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:12px;
+  overflow:hidden;
+  transition:max-height 0.32s ease, opacity 0.25s ease, margin-bottom 0.3s ease;
+  max-height:4000px;
+  opacity:1;
+}
+.recipe-grid.collapsed {
+  max-height:0 !important;
+  opacity:0;
+  margin-bottom:-14px;
+  pointer-events:none;
+}
 @media(min-width:480px) { .recipe-grid { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); } }
+
 
 .recipe-card {
   background:var(--surface); border:1.5px solid var(--border); border-radius:14px;
@@ -905,6 +929,21 @@ function clearSearch() {
   render();
 }
 
+// ── ACCORDION STATE ──
+const collapsedCats = new Set(); // tracks which categories are collapsed
+
+function toggleSection(cat, headerEl, gridEl) {
+  if (collapsedCats.has(cat)) {
+    collapsedCats.delete(cat);
+    headerEl.classList.remove('collapsed');
+    gridEl.classList.remove('collapsed');
+  } else {
+    collapsedCats.add(cat);
+    headerEl.classList.add('collapsed');
+    gridEl.classList.add('collapsed');
+  }
+}
+
 // ── RENDER ──
 function render() {
   const content = document.getElementById('content');
@@ -931,13 +970,20 @@ function render() {
     const recipes = filtered.filter(r => r.cat === cat);
     if (recipes.length === 0) return;
 
+    const isCollapsed = collapsedCats.has(cat);
+
     const header = document.createElement('div');
-    header.className = 'section-header';
-    header.innerHTML = `<div class="section-badge ${cat}">${CATS[cat].label}</div><div class="section-count">${recipes.length}</div><div class="section-line"></div>`;
-    content.appendChild(header);
+    header.className = 'section-header' + (isCollapsed ? ' collapsed' : '');
+    header.innerHTML = `
+      <div class="section-badge ${cat}">${CATS[cat].label}</div>
+      <div class="section-count">${recipes.length}</div>
+      <div class="section-line"></div>
+      <span class="section-chevron">▾</span>`;
 
     const grid = document.createElement('div');
-    grid.className = 'recipe-grid';
+    grid.className = 'recipe-grid' + (isCollapsed ? ' collapsed' : '');
+
+    header.onclick = () => toggleSection(cat, header, grid);
 
     recipes.forEach(recipe => {
       const card = document.createElement('div');
@@ -954,10 +1000,11 @@ function render() {
           </div>
           <div class="card-arrow">›</div>
         </div>`;
-      card.onclick = () => openModal(recipe.id);
+      card.onclick = (e) => { e.stopPropagation(); openModal(recipe.id); };
       grid.appendChild(card);
     });
 
+    content.appendChild(header);
     content.appendChild(grid);
   });
 }
